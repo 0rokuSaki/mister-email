@@ -6,7 +6,7 @@ export function App() {
         <section className='main-app'>
             <header className="app-header">
                 <section className="container">
-                    <h1>Log111</h1>
+                    <h1>Mister Email</h1>
                 </section>
             </header>
 
@@ -16,7 +16,7 @@ export function App() {
 
             <footer>
                 <section className="container">
-                    robotRights 2023 &copy;
+                    Aaron Barkan &copy;
                 </section>
             </footer>
         </section>
