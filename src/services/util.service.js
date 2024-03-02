@@ -9,6 +9,7 @@ export const utilService = {
   getRandomBoolean,
   getRandomTimestamp,
   getRandomEmail,
+  capitalizeString,
 };
 
 function makeId(length = 5) {
@@ -73,4 +74,8 @@ function getRandomEmail() {
   const email = `${username}@${domain}`;
 
   return email;
+}
+
+function capitalizeString(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
 }
