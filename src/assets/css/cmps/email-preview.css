@@ -1,0 +1,55 @@
+.email-preview {
+  align-items: center;
+  border-bottom: 1px solid #e1e7ee;
+  display: flex;
+  flex-direction: row;
+  grid-template-columns: 50px, 250px, auto;
+}
+
+.email-preview.read {
+  background-color: #f2f6fc;
+}
+
+.email-preview.unread {
+  background-color: white;
+  font-weight: 600;
+}
+
+.email-preview button {
+  border-radius: 50%;
+  padding: 10px;
+}
+
+.email-preview button img {
+  width: 16px;
+}
+
+.email-preview h4 {
+  font-weight: inherit;
+}
+
+.email-preview:hover {
+  border: 1px solid #e1e7ee;
+  box-shadow: inset 2px 0 0 #dadce0, inset -2px 0 0 #dadce0, 0 2px 4px 0 rgba(60,64,67,.3), 0 3px 4px 2px rgba(60,64,67,.15);
+  z-index: 3;
+  cursor: pointer;
+}
+
+.email-preview button {
+  width: 40px;
+}
+
+.email-preview .from {
+  margin: 0 20px;
+  width: 200px;
+  overflow: hidden;
+}
+
+.email-preview .subject {
+  grid-column: 3;
+}
+
+.email-preview .date {
+  margin-left: auto;
+  margin-right: 30px;
+}

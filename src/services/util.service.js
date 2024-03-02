@@ -10,6 +10,7 @@ export const utilService = {
   getRandomTimestamp,
   getRandomEmail,
   capitalizeString,
+  formatTimestamp,
 };
 
 function makeId(length = 5) {
@@ -78,4 +79,32 @@ function getRandomEmail() {
 
 function capitalizeString(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+function formatTimestamp(timestamp) {
+  const date = new Date(timestamp);
+  const now = new Date();
+
+  // Check if the timestamp is from today
+  if (
+      date.getDate() === now.getDate() &&
+      date.getMonth() === now.getMonth() &&
+      date.getFullYear() === now.getFullYear()
+  ) {
+      // Return just the hour and minute
+      const hour = String(date.getHours()).padStart(2, '0');
+      const minute = String(date.getMinutes()).padStart(2, '0');
+      return `${hour}:${minute}`;
+  } else if (date.getFullYear() === now.getFullYear()) {
+      // Return month name (short) and day
+      const monthName = date.toLocaleString('default', { month: 'short' });
+      const day = date.getDate();
+      return `${monthName} ${day}`;
+  } else {
+      // Return year, month (short), and day
+      const year = date.getFullYear();
+      const monthName = date.toLocaleString('default', { month: 'short' });
+      const day = date.getDate();
+      return `${year} ${monthName} ${day}`;
+  }
 }
