@@ -1,5 +1,7 @@
 .about-us {
   padding: 0 25%;
+  overflow-y: scroll;
+  height: 100%;
 }
 
 .about-us h2 {

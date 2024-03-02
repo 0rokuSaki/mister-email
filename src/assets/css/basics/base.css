@@ -88,19 +88,21 @@ input {
 
 .main-app {
     min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+    max-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 85% auto;
 }
 
 
 .main-app main {
-    flex-grow: 1;
-    width: 100%;
+  flex-grow: 1;
+  width: 100%;
 }
 
 .main-app > footer {
-    background-color: #111;
-    color: white;
+  background-color: #111;
+  color: white;
 }
 
 
