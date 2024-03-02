@@ -5,6 +5,7 @@ import { AppHeader } from "./cmps/AppHeader";
 
 import { Home } from "./pages/Home";
 import { AboutUs } from "./pages/AboutUs";
+import { EmailIndex } from "./pages/EmailIndex";
 
 export function App() {
   return (
@@ -16,6 +17,7 @@ export function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<AboutUs />}></Route>
+            <Route path="/email" element={<EmailIndex />}></Route>
           </Routes>
         </main>
 

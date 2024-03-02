@@ -1,9 +1,14 @@
+.about-us {
+  padding: 0 25%;
+}
+
 .about-us h2 {
   font-size: 35px;
   font-weight: 600;
 }
 
 .about-us ul {
+  padding: 0;
   list-style-type: none;
 }
 

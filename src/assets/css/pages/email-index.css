@@ -1,0 +1,7 @@
+.email-index {
+  display: grid;
+  grid-template-areas:
+    "h h"
+    "a m"
+  ;
+}
