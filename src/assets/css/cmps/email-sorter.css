@@ -4,6 +4,9 @@
   border-bottom: 1px solid #e1e7ee;
   display: flex;
   height: 40px;
+  position: sticky;
+  top: 0;
+  z-index: 1;
 }
 
 .email-sorter button {
