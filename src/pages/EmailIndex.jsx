@@ -16,7 +16,6 @@ export function EmailIndex() {
     try {
       const emails = await emailService.query(filterBy);
       setEmails(emails);
-      console.dir(emails);
     } catch (err) {
       console.log("Error in loadEmails", err);
     }

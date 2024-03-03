@@ -1,10 +1,4 @@
-.email-list {
-  border-radius: 10px;
-  max-height: 100%;
-  overflow-y: scroll;
-}
-
-.email-list .email-sorter {
+.email-sorter {
   align-items: center;
   background-color: white;
   border-bottom: 1px solid #e1e7ee;
@@ -12,7 +6,7 @@
   height: 40px;
 }
 
-.email-list .email-sorter button {
+.email-sorter button {
   border: 1px solid #c6ced6;
   border-radius: 35px;
   font-size: 15px;
@@ -20,7 +14,11 @@
   padding: 4px 20px;
 }
 
-.email-list .email-sorter button.active {
+.email-sorter button.active {
   border: 1px solid black;
   font-weight: 500;
+}
+
+.email-sorter button img {
+  width: 10px;
 }

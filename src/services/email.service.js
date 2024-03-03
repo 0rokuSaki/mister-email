@@ -390,11 +390,11 @@ function _createEmails() {
         id: 'e130',
         subject: 'Notice: Excessive Funds in Your Account',
         body: 'Dear Valued Customer, We hope this email finds you well. We would like to bring to your attention that there appears to be an unusually high amount of funds in your bank account. While having a healthy balance is certainly a positive indicator of financial stability, we recommend reviewing your account to ensure that the balance reflects your financial goals and needs. If you have any questions or would like assistance in managing your funds, please don\'t hesitate to contact our customer support team. As always, we are here to help you make the most of your banking experience. Best regards, The Banking Team',
-        isRead: false,
+        isRead: true,
         isStarred: false,
         sentAt: 1682153430594,
         removedAt: null,
-        from: 'support@bank.com',
+        from: 'bank@worldbank.com',
         to: 'user@appsus.com'
       },
       {
