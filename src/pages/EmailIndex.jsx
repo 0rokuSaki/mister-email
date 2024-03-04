@@ -24,8 +24,8 @@ export function EmailIndex() {
   async function onRemoveEmail(emailId) {
     try {
       await emailService.remove(emailId);
-      setEmails((prevEmailss) => {
-        return prevEmailss.filter((robot) => robot.id !== emailId);
+      setEmails(prevEmailss => {
+        return prevEmailss.filter(email => email.id !== emailId);
       });
     } catch (err) {
       console.log("Error in onRemoveEmail", err);
@@ -50,7 +50,7 @@ export function EmailIndex() {
     <section className="email-index">
       <EmailHeader />
       <EmailFolderList />
-      <EmailList emails={emails} />
+      <EmailList emails={emails} onUpdateEmail={onUpdateEmail} onRemoveEmail={onRemoveEmail}/>
     </section>
   );
 }

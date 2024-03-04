@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { EmailSorter } from "./EmailSorter";
 import { EmailPreview } from "./EmailPreview";
 
-export function EmailList({ emails }) {
+export function EmailList({ emails, onUpdateEmail, onRemoveEmail }) {
   const [orderBy, setOrderBy] = useState("date");
   const [order, setOrder] = useState("desc");
 
@@ -32,9 +32,20 @@ export function EmailList({ emails }) {
   const sortedEmails = sortEmails();
   return (
     <section className="email-list">
-      <EmailSorter onSortButtonClick={onSortButtonClick} orderBy={orderBy} order={order}/>
+      <EmailSorter
+        onSortButtonClick={onSortButtonClick}
+        orderBy={orderBy}
+        order={order}
+      />
       {sortedEmails.map((email) => {
-        return <EmailPreview key={email.id} email={email} />;
+        return (
+          <EmailPreview
+            key={email.id}
+            email={email}
+            onUpdateEmail={onUpdateEmail}
+            onRemoveEmail={onRemoveEmail}
+          />
+        );
       })}
     </section>
   );
