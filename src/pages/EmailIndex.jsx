@@ -21,6 +21,30 @@ export function EmailIndex() {
     }
   }
 
+  async function onRemoveEmail(emailId) {
+    try {
+      await emailService.remove(emailId);
+      setEmails((prevEmailss) => {
+        return prevEmailss.filter((robot) => robot.id !== emailId);
+      });
+    } catch (err) {
+      console.log("Error in onRemoveEmail", err);
+    }
+  }
+
+  async function onUpdateEmail(email) {
+    try {
+      const updatedEmail = await emailService.save(email);
+      setEmails((prevEmails) =>
+        prevEmails.map((currEmail) =>
+          currEmail.id === updatedEmail.id ? updatedEmail : currEmail
+        )
+      );
+    } catch (err) {
+      console.log("Error in onRemoveUpdate", err);
+    }
+  }
+
   if (!emails) return <div>Loading...</div>;
   return (
     <section className="email-index">
