@@ -1,21 +1,25 @@
 .email-details {
-  padding: 16px 24px;
+  padding: 16px 32px;
 }
 
-.email-details .sub-header,
-.email-details .sub-header aside {
+.email-details .action-buttons {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.email-details header {
+  margin-bottom: 16px;
+}
+
+.email-details .sub-header {
+  display: flex;
   align-items: center;
-  display: flex;
-  gap: 8px;
 }
 
-.email-details .sub-header aside {
+.email-details .sub-header .date-wrapper {
   margin-left: auto;
-}
-
-.email-details .sub-header .action-buttons {
-  display: flex;
-  gap: 8px;
+  margin-right: 12px;
 }
 
 .email-details main {
