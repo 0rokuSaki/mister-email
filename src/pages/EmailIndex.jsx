@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { emailService } from "../services/email.service";
 import { EmailFolderList } from "../cmps/EmailFolderList";
-import { EmailHeader } from "../cmps/EmailHeader";
 import { EmailList } from "../cmps/EmailList";
 
 export function EmailIndex() {
@@ -49,7 +48,7 @@ export function EmailIndex() {
   return (
     <section className="email-index">
       <EmailFolderList />
-      <EmailList emails={emails} onUpdateEmail={onUpdateEmail} onRemoveEmail={onRemoveEmail}/>
+      <EmailList emails={emails}/>
     </section>
   );
 }

@@ -24,7 +24,7 @@ export function AppHeader() {
       <nav>
         <NavLink to="/">Home</NavLink>
         <NavLink to="/about">About</NavLink>
-        <NavLink to="/email">E-Mail</NavLink>
+        <NavLink to="/email/inbox">E-Mail</NavLink>
       </nav>
     </header>
   );

@@ -1,3 +1,13 @@
 .email-list {
   grid-column: 2 / span 1;
+  background-color: aquamarine;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 100%;
+}
+
+.email-list div {
+  flex: 1;
+  overflow-y: auto;
 }

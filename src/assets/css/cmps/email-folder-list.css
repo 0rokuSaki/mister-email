@@ -3,3 +3,11 @@
   display: flex;
   flex-direction: column;
 }
+
+.email-folder-list a {
+  width: 100%;
+}
+
+.email-folder-list a button {
+  width: 100%;
+}
