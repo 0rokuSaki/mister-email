@@ -1,7 +1,7 @@
 .app-header {
   background-color: rgb(180, 180, 180);
   display: grid;
-  grid-template-columns: 256px 1fr 256px;
+  grid-template-columns: minmax(256px, auto) 1fr minmax(256px, auto);
   grid-template-rows: 1fr;
   grid-column: 1 / span 2;
   grid-row: 1 / span 1;

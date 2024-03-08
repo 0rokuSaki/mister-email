@@ -1,4 +1,4 @@
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 
 export function AppHeader() {
   const { pathname } = useLocation();
@@ -8,10 +8,8 @@ export function AppHeader() {
     <header className="app-header">
       <div className="main-logo-wrapper">
         {inEmail && <button className="main-menu-button">Main Menu</button>}
-        <Link>
-          {inEmail && <h1>Gmail</h1>}
-          {!inEmail && <h1>Mister Email</h1>}
-        </Link>
+        {inEmail && <h1>Gmail</h1>}
+        {!inEmail && <h1>Mister Email</h1>}
       </div>
 
       {inEmail && (
@@ -24,7 +22,7 @@ export function AppHeader() {
       )}
 
       <nav>
-        <NavLink to="/home">Home</NavLink>
+        <NavLink to="/">Home</NavLink>
         <NavLink to="/about">About</NavLink>
         <NavLink to="/email">E-Mail</NavLink>
       </nav>
