@@ -8,6 +8,7 @@ export const emailService = {
   remove,
   getById,
   createEmail,
+  getDefaultEmail,
   getDefaultFilter,
 };
 
@@ -23,29 +24,30 @@ _createEmails();
 async function query(filterBy) {
   let emails = await storageService.query(STORAGE_KEY);
   if (filterBy) {
-    let { txt, isRead, status } = filterBy;
+    let { txt, isRead, folder } = filterBy;
     emails = emails.filter((email) => {
+      console.log(email);
       let txtMatches =
         email.subject.toLowerCase().includes(txt.toLowerCase()) ||
         email.body.toLowerCase().includes(txt.toLowerCase());
       let isReadMatches = isRead === null || email.isRead === isRead;
-      let statusMatches = false;
-      switch (status) {
+      let folderMatches = false;
+      switch (folder) {
         case "inbox":
-          statusMatches = email.to === loggedInUser.email;
+          folderMatches = email.to === loggedInUser.email;
           break;
         case "star":
-          statusMatches = email.isStarred;
+          folderMatches = email.isStarred;
           break;
         case "sent":
-          statusMatches = email.sentAt ? true : false;
+          folderMatches = email.sentAt ? true : false;
           break;
         case "trash":
-          statusMatches = email.removedAt ? true : false;
+          folderMatches = email.removedAt ? true : false;
           break;
       }
 
-      return txtMatches && isReadMatches && statusMatches;
+      return txtMatches && isReadMatches && folderMatches;
     });
   }
   return emails;
@@ -89,9 +91,22 @@ function createEmail(
   };
 }
 
+function getDefaultEmail() {
+  return {
+    subject: "",
+    body: "",
+    isRead: false,
+    isStarred: false,
+    sentAt: null,
+    removedAt: null,
+    from: "",
+    to: "",
+  };
+}
+
 function getDefaultFilter() {
   return {
-    status: "inbox",
+    folder: "inbox",
     txt: "",
     isRead: null,
   };

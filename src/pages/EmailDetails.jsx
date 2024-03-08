@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from "react-router";
+import { useOutletContext, useParams, useNavigate } from "react-router";
 import { useEffect, useState } from "react";
 import { emailService } from "../services/email.service";
 import { utilService } from "../services/util.service";
@@ -7,6 +7,7 @@ export function EmailDetails() {
   const [email, setEmail] = useState(null);
   const { emailId } = useParams();
   const navigate = useNavigate();
+  const { onUpdateEmail } = useOutletContext();
 
   useEffect(() => {
     loadEmail();
@@ -14,7 +15,9 @@ export function EmailDetails() {
 
   async function loadEmail() {
     try {
-      const email = await emailService.getById(emailId);
+      let email = await emailService.getById(emailId);
+      email = { ...email, isRead: true };
+      onUpdateEmail(email);
       setEmail(email);
     } catch (err) {
       navigate("/email/inbox");
@@ -38,7 +41,9 @@ export function EmailDetails() {
       </header>
       <div className="sub-header">
         <h3>From: {email.from}</h3>
-        <span className="date-wrapper"><h4>{utilService.formatTimestamp(email.sentAt)}</h4></span>
+        <span className="date-wrapper">
+          <h4>{utilService.formatTimestamp(email.sentAt)}</h4>
+        </span>
       </div>
       <main>{email.body}</main>
     </section>

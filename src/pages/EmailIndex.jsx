@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { emailService } from "../services/email.service";
 import { EmailFolderList } from "../cmps/EmailFolderList";
-import { EmailList } from "../pages/EmailList";
 import { Outlet } from "react-router";
 
 export function EmailIndex() {
@@ -42,7 +41,7 @@ export function EmailIndex() {
         )
       );
     } catch (err) {
-      console.log("Error in onRemoveUpdate", err);
+      console.log("Error in onUpdateEmail", err);
     }
   }
 
@@ -50,8 +49,7 @@ export function EmailIndex() {
   return (
     <section className="email-index">
       <EmailFolderList />
-      {/* <EmailList emails={emails}/> */}
-      <Outlet context={{ emails }} />
+      <Outlet context={{ emails, onUpdateEmail }} />
     </section>
   );
 }
