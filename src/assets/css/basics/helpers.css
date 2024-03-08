@@ -88,8 +88,6 @@
     opacity: 0.2;
 }
 
-
-
 .simple-button:hover:not(:disabled) {
     opacity: 1;
 }

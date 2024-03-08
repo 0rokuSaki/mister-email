@@ -1,16 +1,21 @@
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export function AppHeader() {
   return (
     <header className="app-header">
-      <section className="container">
-        <h1>Mister Email</h1>
-        <nav>
-          <NavLink to="/">Home</NavLink>
-          <NavLink to="/about">About</NavLink>
-          <NavLink to="/email">Email</NavLink>
-        </nav>
-      </section>
+      <div className="main-logo-wrapper">
+        <button className="main-menu-button">Main Menu</button>
+        <Link>
+          <h1>Gmail</h1>
+        </Link>
+      </div>
+
+      <div className="search-bar-wrapper">
+        <form action="">
+          <button>Search</button>
+          <input type="text" name="" id="" placeholder="Search mail"/>
+        </form>
+      </div>
     </header>
   );
 }
