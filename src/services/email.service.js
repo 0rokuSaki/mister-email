@@ -26,7 +26,6 @@ async function query(filterBy) {
   if (filterBy) {
     let { txt, isRead, folder } = filterBy;
     emails = emails.filter((email) => {
-      console.log(email);
       let txtMatches =
         email.subject.toLowerCase().includes(txt.toLowerCase()) ||
         email.body.toLowerCase().includes(txt.toLowerCase());
@@ -36,7 +35,7 @@ async function query(filterBy) {
         case "inbox":
           folderMatches = email.to === loggedInUser.email;
           break;
-        case "star":
+        case "starred":
           folderMatches = email.isStarred;
           break;
         case "sent":

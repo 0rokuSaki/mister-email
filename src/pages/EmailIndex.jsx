@@ -48,7 +48,7 @@ export function EmailIndex() {
   if (!emails) return <div>Loading...</div>;
   return (
     <section className="email-index">
-      <EmailFolderList />
+      <EmailFolderList setFilterBy={setFilterBy} />
       <Outlet context={{ emails, onUpdateEmail }} />
     </section>
   );
