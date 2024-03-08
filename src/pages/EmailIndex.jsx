@@ -48,7 +48,6 @@ export function EmailIndex() {
   if (!emails) return <div>Loading...</div>;
   return (
     <section className="email-index">
-      <EmailHeader />
       <EmailFolderList />
       <EmailList emails={emails} onUpdateEmail={onUpdateEmail} onRemoveEmail={onRemoveEmail}/>
     </section>

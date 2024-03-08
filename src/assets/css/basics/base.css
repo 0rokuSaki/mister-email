@@ -87,6 +87,12 @@ input {
   grid-template-rows: 64px 1fr 64px;
 }
 
+.main-app main {
+  grid-column: 1 / span 2;
+  display: grid;
+  grid-template-columns: subgrid;
+}
+
 a.active {
   color: rgb(84, 17, 147);
   font-weight: 600;
