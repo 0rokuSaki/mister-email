@@ -1,22 +1,23 @@
 .email-details {
+  padding: 16px 24px;
+}
+
+.email-details .sub-header,
+.email-details .sub-header aside {
+  align-items: center;
   display: flex;
-  flex-direction: column;
-  padding: 0 5%;
+  gap: 8px;
 }
 
-.email-details button {
-  border: 1px solid #c6ced6;
-  border-radius: 35px;
-  font-size: 15px;
-  padding: 4px 20px;
-  width: 100px;
+.email-details .sub-header aside {
+  margin-left: auto;
 }
 
-.email-details h2 {
-  font-size: 30px;
-  font-weight: 500;
+.email-details .sub-header .action-buttons {
+  display: flex;
+  gap: 8px;
 }
 
-.email-details h3 {
-  margin-bottom: 30px;
+.email-details main {
+  margin-top: 32px;
 }
