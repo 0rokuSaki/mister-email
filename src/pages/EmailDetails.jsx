@@ -9,10 +9,10 @@ export function EmailDetails() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    loadRobot();
+    loadEmail();
   }, [emailId]);
 
-  async function loadRobot() {
+  async function loadEmail() {
     try {
       const email = await emailService.getById(emailId);
       setEmail(email);

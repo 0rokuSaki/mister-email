@@ -15,6 +15,7 @@ export function EmailIndex() {
   async function loadEmails() {
     try {
       const emails = await emailService.query(filterBy);
+      emails.sort((a, b) => b.sentAt - a.sentAt);
       setEmails(emails);
     } catch (err) {
       console.log("Error in loadEmails", err);
@@ -24,8 +25,8 @@ export function EmailIndex() {
   async function onRemoveEmail(emailId) {
     try {
       await emailService.remove(emailId);
-      setEmails(prevEmailss => {
-        return prevEmailss.filter(email => email.id !== emailId);
+      setEmails((prevEmailss) => {
+        return prevEmailss.filter((email) => email.id !== emailId);
       });
     } catch (err) {
       console.log("Error in onRemoveEmail", err);
@@ -50,7 +51,7 @@ export function EmailIndex() {
     <section className="email-index">
       <EmailFolderList />
       {/* <EmailList emails={emails}/> */}
-      <Outlet context={{emails}}/>
+      <Outlet context={{ emails }} />
     </section>
   );
 }
