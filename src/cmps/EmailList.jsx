@@ -3,83 +3,11 @@ import { useState } from "react";
 import { EmailPreview } from "./EmailPreview";
 
 export function EmailList({ emails }) {
-  console.log(emails);
   return (
     <section className="email-list">
-      <div>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-        <p>sdaasdf</p>
-      </div>
+      {emails.map((email) => (
+        <EmailPreview key={email.id} email={email} />
+      ))}
     </section>
   );
 }

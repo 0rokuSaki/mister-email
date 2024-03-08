@@ -1,13 +1,8 @@
 .email-list {
   grid-column: 2 / span 1;
-  background-color: aquamarine;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
+  background-color: rgb(219, 219, 219);
+  display: grid;
+  grid-template-columns: 28px 48px minmax(100px, 200px) minmax(200px, 1fr) 256px;
+  overflow: scroll;
   height: 100%;
-}
-
-.email-list div {
-  flex: 1;
-  overflow-y: auto;
 }
