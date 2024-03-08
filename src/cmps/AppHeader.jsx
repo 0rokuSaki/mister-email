@@ -4,6 +4,7 @@ export function AppHeader() {
   const { pathname } = useLocation();
 
   const inEmail = pathname.toLowerCase().includes("email");
+  const dynClass = inEmail ? "active" : "";
   return (
     <header className="app-header">
       <div className="main-logo-wrapper">
@@ -24,7 +25,7 @@ export function AppHeader() {
       <nav>
         <NavLink to="/">Home</NavLink>
         <NavLink to="/about">About</NavLink>
-        <NavLink to="/email/inbox">E-Mail</NavLink>
+        <NavLink to="/email/inbox" className={dynClass}>E-Mail</NavLink>
       </nav>
     </header>
   );
