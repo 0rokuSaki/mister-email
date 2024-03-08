@@ -1,0 +1,5 @@
+.app-footer {
+  background-color: rgb(180, 180, 180);
+  grid-column: 1 / span 2;
+  grid-row: 3 / span 1;
+}
