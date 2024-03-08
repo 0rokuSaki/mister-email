@@ -1,26 +1,49 @@
 .app-header {
-  align-items: center;
   background-color: rgb(180, 180, 180);
   display: grid;
-  grid-template-columns: subgrid;
+  grid-template-columns: 256px 1fr 256px;
   grid-template-rows: 1fr;
   grid-column: 1 / span 2;
   grid-row: 1 / span 1;
+  align-items: center;
+  justify-content: center;
 }
 
 .app-header .main-logo-wrapper {
   display: flex;
   flex-direction: row;
+  gap: 10px;
   grid-column: 1 / span 1;
   grid-row: 1 / span 1;
+  text-align: center;
+  padding: 0 16px;
 }
 
 .app-header .search-bar-wrapper {
-  background-color: azure;
   display: flex;
   flex-direction: row;
   grid-column: 2 / span 1;
   grid-row: 1 / span 1;
   padding: 10px;
+  width: 50%;
+}
+
+.app-header .search-bar-wrapper form {
+  display: flex;
+  width: 100%;
+}
+
+.app-header .search-bar-wrapper input[type="text"] {
+  min-width: 0;
+  flex-grow: 1;
+}
+
+.app-header nav {
+  grid-column: 3 / span 1;
+  grid-row: 1 / span 1;
+  display: flex;
+  justify-content: space-around;
+  gap: 10px;
   width: fit-content;
+  text-align: center;
 }

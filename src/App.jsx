@@ -8,6 +8,7 @@ export function App() {
     <Router>
       <section className="main-app">
         <AppHeader />
+        
         <AppFooter />
       </section>
     </Router>
