@@ -19,7 +19,9 @@
   }
 
   .action-buttons-wrapper {
-    display: inline-block;
+    display: flex;
+    margin-left: auto;
+    gap: 8px;
   }
 }
 
