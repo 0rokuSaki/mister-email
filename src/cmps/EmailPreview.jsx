@@ -5,12 +5,13 @@ import { utilService } from "../services/util.service";
 
 export function EmailPreview({ email }) {
   const dynClass = email.isRead ? "" : "unread";
-  const dynBtnClass = email.isRead ? "mark-as-unread-btn" : "mark-as-unread-btn";
-  const dynBtnTxt = email.isRead ? "Mark As Unread" : "Mark As Read";
+  const starBtnTxt = email.isStarred ? "Unstar" : "Star";
+  const markBtnClass = email.isRead ? "mark-as-unread-btn" : "mark-as-unread-btn";
+  const markBtnTxt = email.isRead ? "Mark As Unread" : "Mark As Read";
   return (
     <article className={`email-preview ${dynClass}`}>
       <input type="checkbox" name="" id="" />
-      <button>Star</button>
+      <button>{starBtnTxt}</button>
       <span className="from-wrapper">
         {utilService.capitalizeString(email.from.split("@")[0])}
       </span>
@@ -20,7 +21,7 @@ export function EmailPreview({ email }) {
       </span>
       <span className="action-buttons-wrapper">
         <button className="delete-button">Delete</button>
-        <button className={dynBtnClass}>{dynBtnTxt}</button>
+        <button className={markBtnClass}>{markBtnTxt}</button>
       </span>
     </article>
   );

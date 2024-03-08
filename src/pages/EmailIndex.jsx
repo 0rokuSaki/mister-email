@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { emailService } from "../services/email.service";
 import { EmailFolderList } from "../cmps/EmailFolderList";
-import { EmailList } from "../cmps/EmailList";
+import { EmailList } from "../pages/EmailList";
+import { Outlet } from "react-router";
 
 export function EmailIndex() {
   const [emails, setEmails] = useState(null);
@@ -48,7 +49,8 @@ export function EmailIndex() {
   return (
     <section className="email-index">
       <EmailFolderList />
-      <EmailList emails={emails}/>
+      {/* <EmailList emails={emails}/> */}
+      <Outlet context={{emails}}/>
     </section>
   );
 }
