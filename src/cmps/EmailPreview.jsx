@@ -2,32 +2,37 @@ import { utilService } from "../services/util.service";
 import { eventBusService } from "../services/event-bus.service";
 
 export function EmailPreview({ email }) {
-  function onDeleteClick(ev) {
+  function onButtonClick(ev) {
     ev.stopPropagation();
     ev.preventDefault();
-    eventBusService.emit("onRemoveEmail", email);
-  }
-
-  function onMarkClick(ev) {
-    ev.stopPropagation();
-    ev.preventDefault();
-    eventBusService.emit("onUpdateEmail", { ...email, isRead: !email.isRead });
-  }
-
-  function onStarClick(ev) {
-    ev.stopPropagation();
-    ev.preventDefault();
-
+    switch (ev.target.className) {
+      case "delete-btn":
+        eventBusService.emit("onRemoveEmail", email);
+        break;
+      case "star-toggle-btn":
+        eventBusService.emit("onUpdateEmail", {
+          ...email,
+          isStarred: !email.isStarred,
+        });
+        break;
+      case "read-status-toggle-btn":
+        eventBusService.emit("onUpdateEmail", {
+          ...email,
+          isRead: !email.isRead,
+        });
+        break;
+    }
   }
 
   const dynClass = email.isRead ? "" : "unread";
   const starBtnTxt = email.isStarred ? "Unstar" : "Star";
-  const markBtnClass = email.isRead ? "mark-as-unread-btn" : "mark-as-read-btn";
   const markBtnTxt = email.isRead ? "Mark As Unread" : "Mark As Read";
   return (
     <article className={`email-preview ${dynClass}`}>
       <input type="checkbox" name="" id="" />
-      <button>{starBtnTxt}</button>
+      <button className="star-toggle-btn" onClick={onButtonClick}>
+        {starBtnTxt}
+      </button>
       <span className="from-wrapper">
         {utilService.capitalizeString(email.from.split("@")[0])}
       </span>
@@ -36,10 +41,10 @@ export function EmailPreview({ email }) {
         {utilService.formatTimestamp(email.sentAt)}
       </span>
       <span className="action-buttons-wrapper">
-        <button className="delete-button" onClick={onDeleteClick}>
+        <button className="delete-btn" onClick={onButtonClick}>
           Delete
         </button>
-        <button className={markBtnClass} onClick={onMarkClick}>
+        <button className="read-status-toggle-btn" onClick={onButtonClick}>
           {markBtnTxt}
         </button>
       </span>
