@@ -12,11 +12,15 @@ export function EmailPreview({ email }) {
     }
   }
 
+  function onMarkClick(ev) {
+    ev.stopPropagation();
+    ev.preventDefault();
+    eventBusService.emit("onUpdateEmail", { ...email, isRead: !email.isRead });
+  }
+
   const dynClass = email.isRead ? "" : "unread";
   const starBtnTxt = email.isStarred ? "Unstar" : "Star";
-  const markBtnClass = email.isRead
-    ? "mark-as-unread-btn"
-    : "mark-as-unread-btn";
+  const markBtnClass = email.isRead ? "mark-as-unread-btn" : "mark-as-read-btn";
   const markBtnTxt = email.isRead ? "Mark As Unread" : "Mark As Read";
   return (
     <article className={`email-preview ${dynClass}`}>
@@ -33,7 +37,9 @@ export function EmailPreview({ email }) {
         <button className="delete-button" onClick={onDeleteClick}>
           Delete
         </button>
-        <button className={markBtnClass}>{markBtnTxt}</button>
+        <button className={markBtnClass} onClick={onMarkClick}>
+          {markBtnTxt}
+        </button>
       </span>
     </article>
   );
