@@ -43,7 +43,8 @@ export function EmailIndex() {
       } catch (err) {
         console.log("Error in onRemoveEmail", err);
       }
-    } else { // Move to trash
+    } else {
+      // Move to trash
       try {
         await emailService.save({ ...email, removedAt: Date.now() });
         setEmails((prevEmails) =>
@@ -72,7 +73,7 @@ export function EmailIndex() {
   return (
     <section className="email-index">
       <EmailFolderList setFilterBy={setFilterBy} />
-      <Outlet context={{ emails, onUpdateEmail }} />
+      <Outlet context={{ emails, onUpdateEmail, onRemoveEmail }} />
     </section>
   );
 }

@@ -5,9 +5,12 @@ import { utilService } from "../services/util.service";
 
 export function EmailDetails() {
   const [email, setEmail] = useState(null);
-  const { emailId } = useParams();
+  const { folder, emailId } = useParams();
   const navigate = useNavigate();
-  const { onUpdateEmail } = useOutletContext();
+  const { onUpdateEmail, onRemoveEmail } = useOutletContext();
+
+  const starBtnTxt = email && email.isStarred ? "Unstar" : "Star";
+  const goBackUrl = `/email/${folder}`;
 
   useEffect(() => {
     loadEmail();
@@ -18,24 +21,37 @@ export function EmailDetails() {
       let email = await emailService.getById(emailId);
       email = { ...email, isRead: true };
       onUpdateEmail(email);
-      setEmail(email);
+      setEmail(email); // TODO: What to do if onUpdateEmail fails?
     } catch (err) {
-      navigate("/email/inbox");
+      navigate(goBackUrl);
       console.log("Error loading email:", err);
     }
   }
 
-  const starBtnTxt = email && email.isStarred ? "Unstar" : "Star";
+  function onStarToggleClick() {
+    const updatedEmail = { ...email, isStarred: !email.isStarred };
+    onUpdateEmail(updatedEmail);
+    setEmail(updatedEmail); // TODO: What to do if onUpdateEmail fails?
+  }
+
+  function onDeleteClick() {
+    onRemoveEmail(email);
+    navigate(goBackUrl);
+  }
 
   if (!email) return <div>Loading...</div>;
   return (
     <section className="email-details">
       <header>
         <div className="action-buttons">
-          <button className="go-back-button">Go Back</button>
-          <button className="star-toggle-btn">{starBtnTxt}</button>
+          <button className="go-back-btn" onClick={() => navigate(goBackUrl)}>
+            Go Back
+          </button>
+          <button className="star-toggle-btn" onClick={onStarToggleClick}>
+            {starBtnTxt}
+          </button>
           <button className="reply-btn">Reply</button>
-          <button className="delete-btn">Delete</button>
+          <button className="delete-btn" onClick={onDeleteClick}>Delete</button>
         </div>
         <h2>{email.subject}</h2>
       </header>
