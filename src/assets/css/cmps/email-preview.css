@@ -18,13 +18,20 @@
   }
 
   .action-buttons-wrapper {
+    grid-column: 5 / span 1;
     display: flex;
     margin-left: auto;
     gap: 8px;
   }
 }
 
-.email-preview .from-wrapper,
+.email-preview .from-wrapper {
+  grid-column: 3 / span 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .email-preview .subject-wrapper {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -32,6 +39,7 @@
 }
 
 .email-preview .date-wrapper {
+  grid-column: 5 / span 1;
   margin-right: 16px;
   text-align: right;
 }

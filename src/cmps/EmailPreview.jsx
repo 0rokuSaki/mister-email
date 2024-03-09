@@ -30,9 +30,9 @@ export function EmailPreview({ email }) {
   return (
     <article className={`email-preview ${dynClass}`}>
       <input type="checkbox" name="" id="" />
-      <button className="star-toggle-btn" onClick={onButtonClick}>
+      {!email.removedAt && <button className="star-toggle-btn" onClick={onButtonClick}>
         {starBtnTxt}
-      </button>
+      </button>}
       <span className="from-wrapper">
         {utilService.capitalizeString(email.from.split("@")[0])}
       </span>
