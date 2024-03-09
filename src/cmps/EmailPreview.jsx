@@ -5,17 +5,19 @@ export function EmailPreview({ email }) {
   function onDeleteClick(ev) {
     ev.stopPropagation();
     ev.preventDefault();
-    if (email.removedAt) {
-      eventBusService.emit("onRemoveEmail", email);
-    } else {
-      eventBusService.emit("onMoveToTrash", email);
-    }
+    eventBusService.emit("onRemoveEmail", email);
   }
 
   function onMarkClick(ev) {
     ev.stopPropagation();
     ev.preventDefault();
     eventBusService.emit("onUpdateEmail", { ...email, isRead: !email.isRead });
+  }
+
+  function onStarClick(ev) {
+    ev.stopPropagation();
+    ev.preventDefault();
+
   }
 
   const dynClass = email.isRead ? "" : "unread";

@@ -11,12 +11,10 @@ export function EmailIndex() {
   useEffect(() => {
     eventBusService.on("onUpdateEmail", onUpdateEmail);
     eventBusService.on("onRemoveEmail", onRemoveEmail);
-    eventBusService.on("onMoveToTrash", onMoveToTrash);
 
     return () => {
       eventBusService.off("onUpdateEmail", onUpdateEmail);
       eventBusService.off("onRemoveEmail", onRemoveEmail);
-      eventBusService.off("onMoveToTrash", onMoveToTrash);
     };
   }, []);
 
@@ -34,26 +32,26 @@ export function EmailIndex() {
     }
   }
 
-  /* Removes email from DB */
   async function onRemoveEmail(email) {
-    try {
-      await emailService.remove(email.id);
-      setEmails(prevEmails => {
-        return prevEmails.filter(currEmail => currEmail.id !== email.id);
-      });
-    } catch (err) {
-      console.log("Error in onRemoveEmail", err);
-    }
-  }
-
-  async function onMoveToTrash(email) {
-    try {
-      await emailService.save({ ...email, removedAt: Date.now() });
-      setEmails((prevEmails) =>
-        prevEmails.filter((currEmail) => currEmail.id !== email.id)
-      );
-    } catch (err) {
-      console.log("Error in onMoveToTrash", err);
+    // Remove from DB if email is in trash
+    if (email.removedAt) {
+      try {
+        await emailService.remove(email.id);
+        setEmails((prevEmails) => {
+          return prevEmails.filter((currEmail) => currEmail.id !== email.id);
+        });
+      } catch (err) {
+        console.log("Error in onRemoveEmail", err);
+      }
+    } else { // Move to trash
+      try {
+        await emailService.save({ ...email, removedAt: Date.now() });
+        setEmails((prevEmails) =>
+          prevEmails.filter((currEmail) => currEmail.id !== email.id)
+        );
+      } catch (err) {
+        console.log("Error in onMoveToTrash", err);
+      }
     }
   }
 
