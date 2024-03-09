@@ -2,10 +2,23 @@ import { useEffect, useState } from "react";
 import { emailService } from "../services/email.service";
 import { EmailFolderList } from "../cmps/EmailFolderList";
 import { Outlet } from "react-router";
+import { eventBusService } from "../services/event-bus.service";
 
 export function EmailIndex() {
   const [emails, setEmails] = useState(null);
   const [filterBy, setFilterBy] = useState(emailService.getDefaultFilter());
+
+  useEffect(() => {
+    eventBusService.on("onUpdateEmail", onUpdateEmail);
+    eventBusService.on("onRemoveEmail", onRemoveEmail);
+    eventBusService.on("onMoveToTrash", onMoveToTrash);
+
+    return () => {
+      eventBusService.off("onUpdateEmail", onUpdateEmail);
+      eventBusService.off("onRemoveEmail", onRemoveEmail);
+      eventBusService.off("onMoveToTrash", onMoveToTrash);
+    };
+  }, []);
 
   useEffect(() => {
     loadEmails();
@@ -21,14 +34,26 @@ export function EmailIndex() {
     }
   }
 
-  async function onRemoveEmail(emailId) {
+  /* Removes email from DB */
+  async function onRemoveEmail(email) {
     try {
-      await emailService.remove(emailId);
-      setEmails((prevEmailss) => {
-        return prevEmailss.filter((email) => email.id !== emailId);
+      await emailService.remove(email.id);
+      setEmails(prevEmails => {
+        return prevEmails.filter(currEmail => currEmail.id !== email.id);
       });
     } catch (err) {
       console.log("Error in onRemoveEmail", err);
+    }
+  }
+
+  async function onMoveToTrash(email) {
+    try {
+      await emailService.save({ ...email, removedAt: Date.now() });
+      setEmails((prevEmails) =>
+        prevEmails.filter((currEmail) => currEmail.id !== email.id)
+      );
+    } catch (err) {
+      console.log("Error in onMoveToTrash", err);
     }
   }
 

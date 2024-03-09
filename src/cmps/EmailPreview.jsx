@@ -1,19 +1,22 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-
 import { utilService } from "../services/util.service";
+import { eventBusService } from "../services/event-bus.service";
 
 export function EmailPreview({ email }) {
-
   function onDeleteClick(ev) {
     ev.stopPropagation();
     ev.preventDefault();
-    console.log("TODO: NEED TO IMPLEMENT 'onDeleteClick'");
+    if (email.removedAt) {
+      eventBusService.emit("onRemoveEmail", email);
+    } else {
+      eventBusService.emit("onMoveToTrash", email);
+    }
   }
 
   const dynClass = email.isRead ? "" : "unread";
   const starBtnTxt = email.isStarred ? "Unstar" : "Star";
-  const markBtnClass = email.isRead ? "mark-as-unread-btn" : "mark-as-unread-btn";
+  const markBtnClass = email.isRead
+    ? "mark-as-unread-btn"
+    : "mark-as-unread-btn";
   const markBtnTxt = email.isRead ? "Mark As Unread" : "Mark As Read";
   return (
     <article className={`email-preview ${dynClass}`}>
@@ -27,7 +30,9 @@ export function EmailPreview({ email }) {
         {utilService.formatTimestamp(email.sentAt)}
       </span>
       <span className="action-buttons-wrapper">
-        <button className="delete-button" onClick={onDeleteClick}>Delete</button>
+        <button className="delete-button" onClick={onDeleteClick}>
+          Delete
+        </button>
         <button className={markBtnClass}>{markBtnTxt}</button>
       </span>
     </article>

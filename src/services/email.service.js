@@ -33,13 +33,13 @@ async function query(filterBy) {
       let folderMatches = false;
       switch (folder) {
         case "inbox":
-          folderMatches = email.to === loggedInUser.email;
+          folderMatches = !email.removedAt && email.to === loggedInUser.email;
           break;
         case "starred":
-          folderMatches = email.isStarred;
+          folderMatches = !email.removedAt && email.isStarred;
           break;
         case "sent":
-          folderMatches = email.sentAt ? true : false;
+          folderMatches = !email.removedAt && email.sentAt ? true : false;
           break;
         case "trash":
           folderMatches = email.removedAt ? true : false;
