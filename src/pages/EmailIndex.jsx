@@ -11,10 +11,12 @@ export function EmailIndex() {
   useEffect(() => {
     eventBusService.on("onUpdateEmail", onUpdateEmail);
     eventBusService.on("onRemoveEmail", onRemoveEmail);
+    eventBusService.on("setFilterBy", setFilterBy);
 
     return () => {
       eventBusService.off("onUpdateEmail", onUpdateEmail);
       eventBusService.off("onRemoveEmail", onRemoveEmail);
+      eventBusService.off("setFilterBy", setFilterBy);
     };
   }, []);
 

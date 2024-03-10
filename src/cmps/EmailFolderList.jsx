@@ -1,12 +1,14 @@
 import { Link } from "react-router-dom";
 import { utilService } from "../services/util.service.js";
+import { eventBusService } from "../services/event-bus.service.js";
 
 export function EmailFolderList({ setFilterBy }) {
   const folders = ["inbox", "starred", "sent", "draft", "trash"];
 
   function onFolderBtnClick(folder) {
+    eventBusService.emit("setSearchText", "");
     setFilterBy((prevFilter) => {
-      return { ...prevFilter, folder };
+      return { ...prevFilter, txt: "", folder };
     });
   }
 
