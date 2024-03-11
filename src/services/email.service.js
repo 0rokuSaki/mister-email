@@ -33,13 +33,17 @@ async function query(filterBy) {
       let folderMatches = false;
       switch (folder) {
         case "inbox":
-          folderMatches = !email.removedAt && email.to === loggedInUser.email && email.sentAt;
+          folderMatches =
+            !email.removedAt && email.to === loggedInUser.email && email.sentAt;
           break;
         case "starred":
           folderMatches = !email.removedAt && email.isStarred;
           break;
         case "sent":
-          folderMatches = !email.removedAt && email.from === loggedInUser.email && email.sentAt;
+          folderMatches =
+            !email.removedAt &&
+            email.from === loggedInUser.email &&
+            email.sentAt;
           break;
         case "trash":
           folderMatches = !!email.removedAt;
@@ -105,9 +109,11 @@ function getDefaultEmail() {
 
 function getDefaultFilter() {
   return {
-    folder: "inbox",
+    folder: "inbox",   // "inbox"/"starred"/"sent"/"draft"/"trash"
     txt: "",
-    isRead: null,
+    isRead: null,      // "read"/"unread"
+    sortBy: "date",    // "date"/"subject"
+    sortOrder: "desc", // "asc"/"desc"
   };
 }
 

@@ -24,6 +24,10 @@ export function EmailIndex() {
     loadEmails();
   }, [filterBy]);
 
+  function onSetFilter(fieldsToUpdate) {
+    setFilterBy(prevFilterBy => ({...prevFilterBy, ...fieldsToUpdate}));
+  }
+
   async function loadEmails() {
     try {
       const emails = await emailService.query(filterBy);
