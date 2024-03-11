@@ -11,6 +11,8 @@ export function EmailIndex() {
   const [filterBy, setFilterBy] = useState(emailService.getDefaultFilter());
   const { emailId } = useParams();
 
+  const { folder, txt, isRead, sortBy, sortOrder } = filterBy;
+
   useEffect(() => {
     eventBusService.on("onUpdateEmail", onUpdateEmail);
     eventBusService.on("onRemoveEmail", onRemoveEmail);
@@ -81,9 +83,11 @@ export function EmailIndex() {
   if (!emails) return <div>Loading...</div>;
   return (
     <section className="email-index">
-      <EmailFolderList setFilterBy={setFilterBy} />
+      <EmailFolderList onSetFilter={onSetFilter} filterBy={{ folder }} />
       {!emailId && <EmailList emails={emails} />}
-      {emailId && <Outlet context={{ emailId, onUpdateEmail, onRemoveEmail }} />}
+      {emailId && (
+        <Outlet context={{ emailId, onUpdateEmail, onRemoveEmail }} />
+      )}
     </section>
   );
 }

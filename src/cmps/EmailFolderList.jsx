@@ -1,28 +1,33 @@
-import { Link } from "react-router-dom";
 import { utilService } from "../services/util.service.js";
 import { eventBusService } from "../services/event-bus.service.js";
+import { useEffect, useState } from "react";
 
-export function EmailFolderList({ setFilterBy }) {
+export function EmailFolderList({ onSetFilter, filterBy }) {
+  const [filterByToEdit, setFilterByToEdit] = useState(filterBy);
+
   const folders = ["inbox", "starred", "sent", "draft", "trash"];
 
-  function onFolderBtnClick(folder) {
+  useEffect(() => {
+    onSetFilter(filterByToEdit);
+  }, [filterByToEdit]);
+
+  function onButtonClick(folder) {
     eventBusService.emit("setSearchText", "");
-    setFilterBy((prevFilter) => {
-      return { ...prevFilter, txt: "", folder };
+    setFilterByToEdit((prevFilter) => {
+      return { ...prevFilter, folder };
     });
   }
 
   return (
     <aside className="email-folder-list">
       {folders.map((folder) => (
-        <Link key={folder} to={`/email/${folder}`}>
-          <button
-            className="folder-btn"
-            onClick={() => onFolderBtnClick(folder)}
-          >
-            <span>{utilService.capitalizeString(folder)}</span>
-          </button>
-        </Link>
+        <button
+          key={folder}
+          className="folder-btn"
+          onClick={() => onButtonClick(folder)}
+        >
+          <span>{utilService.capitalizeString(folder)}</span>
+        </button>
       ))}
     </aside>
   );
