@@ -83,7 +83,7 @@ export function EmailIndex() {
     <section className="email-index">
       <EmailFolderList setFilterBy={setFilterBy} />
       {!emailId && <EmailList emails={emails} />}
-      {emailId && <Outlet context={{ emails, onUpdateEmail, onRemoveEmail }} />}
+      {emailId && <Outlet context={{ emailId, onUpdateEmail, onRemoveEmail }} />}
     </section>
   );
 }

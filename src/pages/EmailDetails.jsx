@@ -1,13 +1,12 @@
-import { useOutletContext, useParams, useNavigate } from "react-router";
+import { useOutletContext, useNavigate } from "react-router";
 import { useEffect, useState } from "react";
 import { emailService } from "../services/email.service";
 import { utilService } from "../services/util.service";
 
 export function EmailDetails() {
   const [email, setEmail] = useState(null);
-  const { folder, emailId } = useParams();
   const navigate = useNavigate();
-  const { onUpdateEmail, onRemoveEmail } = useOutletContext();
+  const { emailId, onUpdateEmail, onRemoveEmail } = useOutletContext();
 
   const starBtnTxt = email && email.isStarred ? "Unstar" : "Star";
   const goBackUrl = "/email";
