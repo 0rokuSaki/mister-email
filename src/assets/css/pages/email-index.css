@@ -2,6 +2,7 @@
   grid-column: 1 / span 2;
   display: grid;
   grid-template-columns: subgrid;
+  grid-template-rows: 52px 1fr;
   height: inherit;
   max-height: inherit;
 }

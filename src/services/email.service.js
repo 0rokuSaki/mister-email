@@ -25,7 +25,8 @@ async function query(filterBy) {
   let emails = await storageService.query(STORAGE_KEY);
   if (filterBy) {
     let { txt, isRead, folder } = filterBy;
-    emails = emails.filter((email) => {
+    emails = emails
+    .filter((email) => {
       let txtMatches =
         email.subject.toLowerCase().includes(txt.toLowerCase()) ||
         email.body.toLowerCase().includes(txt.toLowerCase());
@@ -51,7 +52,19 @@ async function query(filterBy) {
       }
 
       return txtMatches && isReadMatches && folderMatches;
+    })
+    .sort((a, b) => {
+      if (filterBy.sortBy === "date") {
+        return b.sentAt - a.sentAt;
+      } else if (filterBy.sortBy === "subject") {
+        return b.subject.toLowerCase().localeCompare(a.subject.toLowerCase());
+      } else {
+        return 0;
+      }
     });
+    if (filterBy.sortOrder === "asc") {
+      emails.reverse();
+    }
   }
   return emails;
 }
@@ -111,7 +124,7 @@ function getDefaultFilter() {
   return {
     folder: "inbox",   // "inbox"/"starred"/"sent"/"draft"/"trash"
     txt: "",
-    isRead: null,      // "read"/"unread"
+    isRead: null,      // null/true/false
     sortBy: "date",    // "date"/"subject"
     sortOrder: "desc", // "asc"/"desc"
   };

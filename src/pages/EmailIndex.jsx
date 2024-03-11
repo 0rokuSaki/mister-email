@@ -5,6 +5,7 @@ import { Outlet } from "react-router";
 import { eventBusService } from "../services/event-bus.service";
 import { useParams } from "react-router-dom";
 import { EmailList } from "../cmps/EmailList";
+import { EmailFilterSorter } from "../cmps/EmailFilterSorter";
 
 export function EmailIndex() {
   const [emails, setEmails] = useState(null);
@@ -36,7 +37,6 @@ export function EmailIndex() {
   async function loadEmails() {
     try {
       const emails = await emailService.query(filterBy);
-      emails.sort((a, b) => b.sentAt - a.sentAt);
       setEmails(emails);
     } catch (err) {
       console.log("Error in loadEmails", err);
@@ -84,6 +84,12 @@ export function EmailIndex() {
   return (
     <section className="email-index">
       <EmailFolderList onSetFilter={onSetFilter} filterBy={{ folder }} />
+      {!emailId && (
+        <EmailFilterSorter
+          onSetFilter={onSetFilter}
+          filterBy={{ isRead, sortBy, sortOrder }}
+        />
+      )}
       {!emailId && <EmailList emails={emails} />}
       {emailId && (
         <Outlet context={{ emailId, onUpdateEmail, onRemoveEmail }} />
