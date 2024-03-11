@@ -10,7 +10,7 @@ export function EmailDetails() {
   const { onUpdateEmail, onRemoveEmail } = useOutletContext();
 
   const starBtnTxt = email && email.isStarred ? "Unstar" : "Star";
-  const goBackUrl = `/email/${folder}`;
+  const goBackUrl = "/email";
 
   useEffect(() => {
     loadEmail();

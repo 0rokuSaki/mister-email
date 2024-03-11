@@ -3,10 +3,13 @@ import { emailService } from "../services/email.service";
 import { EmailFolderList } from "../cmps/EmailFolderList";
 import { Outlet } from "react-router";
 import { eventBusService } from "../services/event-bus.service";
+import { useParams } from "react-router-dom";
+import { EmailList } from "../cmps/EmailList";
 
 export function EmailIndex() {
   const [emails, setEmails] = useState(null);
   const [filterBy, setFilterBy] = useState(emailService.getDefaultFilter());
+  const { emailId } = useParams();
 
   useEffect(() => {
     eventBusService.on("onUpdateEmail", onUpdateEmail);
@@ -25,7 +28,7 @@ export function EmailIndex() {
   }, [filterBy]);
 
   function onSetFilter(fieldsToUpdate) {
-    setFilterBy(prevFilterBy => ({...prevFilterBy, ...fieldsToUpdate}));
+    setFilterBy((prevFilterBy) => ({ ...prevFilterBy, ...fieldsToUpdate }));
   }
 
   async function loadEmails() {
@@ -79,7 +82,8 @@ export function EmailIndex() {
   return (
     <section className="email-index">
       <EmailFolderList setFilterBy={setFilterBy} />
-      <Outlet context={{ emails, onUpdateEmail, onRemoveEmail }} />
+      {!emailId && <EmailList emails={emails} />}
+      {emailId && <Outlet context={{ emails, onUpdateEmail, onRemoveEmail }} />}
     </section>
   );
 }
