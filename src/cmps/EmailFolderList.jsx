@@ -1,31 +1,29 @@
-import pencilImageUrl from "../assets/imgs/pencil.png";
-import inboxImageUrl from "../assets/imgs/inbox.png";
-import starImageUrl from "../assets/imgs/star.png";
-import sentImageUrl from "../assets/imgs/sent.png";
-import draftImageUrl from "../assets/imgs/draft.png";
-import trashImageUrl from "../assets/imgs/trash.png";
-
+import { Link } from "react-router-dom";
 import { utilService } from "../services/util.service.js";
+import { eventBusService } from "../services/event-bus.service.js";
 
-export function EmailFolderList() {
-  const folders = [
-    { name: "inbox", img: inboxImageUrl },
-    { name: "starred", img: starImageUrl },
-    { name: "sent", img: sentImageUrl },
-    { name: "draft", img: draftImageUrl },
-    { name: "trash", img: trashImageUrl },
-  ];
+export function EmailFolderList({ setFilterBy }) {
+  const folders = ["inbox", "starred", "sent", "draft", "trash"];
+
+  function onFolderBtnClick(folder) {
+    eventBusService.emit("setSearchText", "");
+    setFilterBy((prevFilter) => {
+      return { ...prevFilter, txt: "", folder };
+    });
+  }
 
   return (
     <aside className="email-folder-list">
-      {folders.map((folder) => {
-        return (
-          <button key={folder.name}>
-            <img src={folder.img} alt={`${folder.name}`} />
-            <span>{utilService.capitalizeString(folder.name)}</span>
+      {folders.map((folder) => (
+        <Link key={folder} to={`/email/${folder}`}>
+          <button
+            className="folder-btn"
+            onClick={() => onFolderBtnClick(folder)}
+          >
+            <span>{utilService.capitalizeString(folder)}</span>
           </button>
-        );
-      })}
+        </Link>
+      ))}
     </aside>
   );
 }

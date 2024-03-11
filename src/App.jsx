@@ -4,8 +4,9 @@ import { AppFooter } from "./cmps/AppFooter";
 import { AppHeader } from "./cmps/AppHeader";
 
 import { Home } from "./pages/Home";
-import { AboutUs } from "./pages/AboutUs";
+import { About } from "./pages/About";
 import { EmailIndex } from "./pages/EmailIndex";
+import { EmailList } from "./pages/EmailList";
 import { EmailDetails } from "./pages/EmailDetails";
 
 export function App() {
@@ -14,12 +15,14 @@ export function App() {
       <section className="main-app">
         <AppHeader />
 
-        <main className="container">
+        <main>
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/about" element={<AboutUs />} />
-            <Route path="/email" element={<EmailIndex />} />
-            <Route path="/email/:emailId" element={<EmailDetails />}/>
+            <Route path="/about" element={<About />} />
+            <Route path="/email" element={<EmailIndex />}>
+              <Route path=":folder" element={<EmailList />} />
+              <Route path=":folder/:emailId" element={<EmailDetails />} />
+            </Route>
           </Routes>
         </main>
 

@@ -1,78 +1,53 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-
 import { utilService } from "../services/util.service";
+import { eventBusService } from "../services/event-bus.service";
 
-import starInactiveImageUrl from "../assets/imgs/star-inactive.png";
-import starActiveImageUrl from "../assets/imgs/star-active.png";
-import readImgUrl from "../assets/imgs/read-message.png";
-import unreadImgUrl from "../assets/imgs/unread-message.png";
-import trashImgUrl from "../assets/imgs/trash.png";
-
-export function EmailPreview({ email, onUpdateEmail, onRemoveEmail }) {
-  const [isMouseHovering, setIsMouseHovering] = useState(false);
-
+export function EmailPreview({ email }) {
   function onButtonClick(ev) {
     ev.stopPropagation();
     ev.preventDefault();
-    const btnType = ev.target.className;
-    switch (btnType) {
-      case "star-button":
-        onUpdateEmail({ ...email, isStarred: !email.isStarred });
+    switch (ev.target.className) {
+      case "delete-btn":
+        eventBusService.emit("onRemoveEmail", email);
         break;
-      case "read-button":
-      case "unread-button":
-        onUpdateEmail({ ...email, isRead: !email.isRead });
+      case "star-toggle-btn":
+        eventBusService.emit("onUpdateEmail", {
+          ...email,
+          isStarred: !email.isStarred,
+        });
         break;
-      case "delete-button":
-        onRemoveEmail(email.id);
+      case "read-status-toggle-btn":
+        eventBusService.emit("onUpdateEmail", {
+          ...email,
+          isRead: !email.isRead,
+        });
         break;
     }
   }
 
-  const previewColorClass = email.isRead ? "read" : "unread";
-  const starImageUrl = email.isStarred
-    ? starActiveImageUrl
-    : starInactiveImageUrl;
+  const dynClass = email.isRead ? "" : "unread";
+  const starBtnTxt = email.isStarred ? "Unstar" : "Star";
+  const markBtnTxt = email.isRead ? "Mark As Unread" : "Mark As Read";
   return (
-    <article
-      className={`email-preview ${previewColorClass}`}
-      onMouseEnter={() => setIsMouseHovering(true)}
-      onMouseLeave={() => setIsMouseHovering(false)}
-    >
-      <Link to={`/email/${email.id}`}>
-        <div className="email-summary">
-          <button className="star-button" onClick={onButtonClick}>
-            <img src={starImageUrl} alt="" />
-          </button>
-          <h4 className="from">
-            {utilService.capitalizeString(email.from.split("@")[0])}
-          </h4>
-          <h4 className="subject">{email.subject}</h4>
-          {!isMouseHovering && (
-            <h4 className="date">
-              {utilService.formatTimestamp(email.sentAt)}
-            </h4>
-          )}
-          {isMouseHovering && (
-            <div className="action-buttons-wrapper">
-              {email.isRead && (
-                <button className="unread-button" onClick={onButtonClick}>
-                  <img src={unreadImgUrl} alt="" />
-                </button>
-              )}
-              {!email.isRead && (
-                <button className="read-button" onClick={onButtonClick}>
-                  <img src={readImgUrl} alt="" />
-                </button>
-              )}
-              <button className="delete-button" onClick={onButtonClick}>
-                <img src={trashImgUrl} alt="" />
-              </button>
-            </div>
-          )}
-        </div>
-      </Link>
+    <article className={`email-preview ${dynClass}`}>
+      <input type="checkbox" name="" id="" />
+      {!email.removedAt && <button className="star-toggle-btn" onClick={onButtonClick}>
+        {starBtnTxt}
+      </button>}
+      <span className="from-wrapper">
+        {utilService.capitalizeString(email.from.split("@")[0])}
+      </span>
+      <span className="subject-wrapper">{email.subject}</span>
+      <span className="date-wrapper">
+        {utilService.formatTimestamp(email.sentAt)}
+      </span>
+      <span className="action-buttons-wrapper">
+        <button className="delete-btn" onClick={onButtonClick}>
+          Delete
+        </button>
+        <button className="read-status-toggle-btn" onClick={onButtonClick}>
+          {markBtnTxt}
+        </button>
+      </span>
     </article>
   );
 }

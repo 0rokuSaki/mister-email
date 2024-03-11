@@ -1,30 +1,49 @@
 .app-header {
-  background: #e91e63;
-  color: white;
-  padding: 0 5%;
-  grid-row: 1;
-  grid-column: 1;
-}
-
-.app-header section.container {
-  display: flex;
+  background-color: rgb(180, 180, 180);
+  display: grid;
+  grid-template-columns: minmax(256px, auto) 1fr minmax(256px, auto);
+  grid-template-rows: 1fr;
+  grid-column: 1 / span 2;
+  grid-row: 1 / span 1;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
 }
 
-.app-header h1 {
+.app-header .main-logo-wrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  grid-column: 1 / span 1;
+  grid-row: 1 / span 1;
+  text-align: center;
+  padding: 0 16px;
+}
+
+.app-header .search-bar-wrapper {
+  display: flex;
+  flex-direction: row;
+  grid-column: 2 / span 1;
+  grid-row: 1 / span 1;
+  padding: 10px;
+  width: 50%;
+}
+
+.app-header .search-bar-wrapper form {
+  display: flex;
+  width: 100%;
+}
+
+.app-header .search-bar-wrapper input[type="text"] {
+  min-width: 0;
   flex-grow: 1;
-  font-weight: 600;
 }
 
-.app-header .back {
-  flex-grow: 1;
-}
-
-.app-header nav a:not(:last-child) {
-  margin-right: 10px;
-}
-
-.app-header section.container>section {
-  flex-grow: 1;
+.app-header nav {
+  grid-column: 3 / span 1;
+  grid-row: 1 / span 1;
+  display: flex;
+  justify-content: space-around;
+  gap: 10px;
+  width: fit-content;
+  text-align: center;
 }

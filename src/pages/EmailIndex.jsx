@@ -1,34 +1,64 @@
 import { useEffect, useState } from "react";
 import { emailService } from "../services/email.service";
 import { EmailFolderList } from "../cmps/EmailFolderList";
-import { EmailHeader } from "../cmps/EmailHeader";
-import { EmailList } from "../cmps/EmailList";
+import { Outlet } from "react-router";
+import { eventBusService } from "../services/event-bus.service";
 
 export function EmailIndex() {
   const [emails, setEmails] = useState(null);
   const [filterBy, setFilterBy] = useState(emailService.getDefaultFilter());
 
   useEffect(() => {
+    eventBusService.on("onUpdateEmail", onUpdateEmail);
+    eventBusService.on("onRemoveEmail", onRemoveEmail);
+    eventBusService.on("setFilterBy", setFilterBy);
+
+    return () => {
+      eventBusService.off("onUpdateEmail", onUpdateEmail);
+      eventBusService.off("onRemoveEmail", onRemoveEmail);
+      eventBusService.off("setFilterBy", setFilterBy);
+    };
+  }, []);
+
+  useEffect(() => {
     loadEmails();
   }, [filterBy]);
+
+  function onSetFilter(fieldsToUpdate) {
+    setFilterBy(prevFilterBy => ({...prevFilterBy, ...fieldsToUpdate}));
+  }
 
   async function loadEmails() {
     try {
       const emails = await emailService.query(filterBy);
+      emails.sort((a, b) => b.sentAt - a.sentAt);
       setEmails(emails);
     } catch (err) {
       console.log("Error in loadEmails", err);
     }
   }
 
-  async function onRemoveEmail(emailId) {
-    try {
-      await emailService.remove(emailId);
-      setEmails(prevEmailss => {
-        return prevEmailss.filter(email => email.id !== emailId);
-      });
-    } catch (err) {
-      console.log("Error in onRemoveEmail", err);
+  async function onRemoveEmail(email) {
+    // Remove from DB if email is in trash
+    if (email.removedAt) {
+      try {
+        await emailService.remove(email.id);
+        setEmails((prevEmails) => {
+          return prevEmails.filter((currEmail) => currEmail.id !== email.id);
+        });
+      } catch (err) {
+        console.log("Error in onRemoveEmail", err);
+      }
+    } else {
+      // Move to trash
+      try {
+        await emailService.save({ ...email, removedAt: Date.now() });
+        setEmails((prevEmails) =>
+          prevEmails.filter((currEmail) => currEmail.id !== email.id)
+        );
+      } catch (err) {
+        console.log("Error in onMoveToTrash", err);
+      }
     }
   }
 
@@ -41,16 +71,15 @@ export function EmailIndex() {
         )
       );
     } catch (err) {
-      console.log("Error in onRemoveUpdate", err);
+      console.log("Error in onUpdateEmail", err);
     }
   }
 
   if (!emails) return <div>Loading...</div>;
   return (
     <section className="email-index">
-      <EmailHeader />
-      <EmailFolderList />
-      <EmailList emails={emails} onUpdateEmail={onUpdateEmail} onRemoveEmail={onRemoveEmail}/>
+      <EmailFolderList setFilterBy={setFilterBy} />
+      <Outlet context={{ emails, onUpdateEmail, onRemoveEmail }} />
     </section>
   );
 }

@@ -1,10 +1,7 @@
 .email-index {
+  grid-column: 1 / span 2;
   display: grid;
-  grid-template-rows: 65px 1fr;
-  grid-template-columns: 260px 1fr;
-  grid-template-areas:
-    "h h"
-    "a m"
-  ;
-  height: 100%;
+  grid-template-columns: subgrid;
+  height: inherit;
+  max-height: inherit;
 }
