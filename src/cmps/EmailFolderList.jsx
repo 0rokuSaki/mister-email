@@ -1,6 +1,7 @@
 import { utilService } from "../services/util.service.js";
 import { eventBusService } from "../services/event-bus.service.js";
 import { useEffect, useState } from "react";
+import { NavLink } from "react-router-dom";
 
 export function EmailFolderList({ onSetFilter, filterBy }) {
   const [filterByToEdit, setFilterByToEdit] = useState(filterBy);
@@ -21,13 +22,14 @@ export function EmailFolderList({ onSetFilter, filterBy }) {
   return (
     <aside className="email-folder-list">
       {folders.map((folder) => (
-        <button
-          key={folder}
-          className="folder-btn"
-          onClick={() => onButtonClick(folder)}
-        >
-          <span>{utilService.capitalizeString(folder)}</span>
-        </button>
+        <NavLink key={folder} to={`/email/${folder}`}>
+          <button
+            className="folder-btn"
+            onClick={() => onButtonClick(folder)}
+          >
+            <span>{utilService.capitalizeString(folder)}</span>
+          </button>
+        </NavLink>
       ))}
     </aside>
   );
