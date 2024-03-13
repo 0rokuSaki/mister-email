@@ -1,3 +1,4 @@
+import { useParams } from "react-router-dom";
 import { useOutletContext, useNavigate } from "react-router";
 import { useEffect, useState } from "react";
 import { emailService } from "../services/email.service";
@@ -6,10 +7,11 @@ import { utilService } from "../services/util.service";
 export function EmailDetails() {
   const [email, setEmail] = useState(null);
   const navigate = useNavigate();
+  const { folder } = useParams();
   const { emailId, onUpdateEmail, onRemoveEmail } = useOutletContext();
 
   const starBtnTxt = email && email.isStarred ? "Unstar" : "Star";
-  const goBackUrl = "/email";
+  const goBackUrl = `/email/${folder}`;
 
   useEffect(() => {
     loadEmail();
@@ -50,7 +52,9 @@ export function EmailDetails() {
             {starBtnTxt}
           </button>
           <button className="reply-btn">Reply</button>
-          <button className="delete-btn" onClick={onDeleteClick}>Delete</button>
+          <button className="delete-btn" onClick={onDeleteClick}>
+            Delete
+          </button>
         </div>
         <h2>{email.subject}</h2>
       </header>
