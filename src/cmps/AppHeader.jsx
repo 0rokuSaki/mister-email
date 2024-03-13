@@ -10,10 +10,10 @@ export function AppHeader() {
   const dynClass = inEmail ? "active" : "";
 
   useEffect(() => {
-    eventBusService.on("setSearchText", setSearchText);
+    const unsubscribe = eventBusService.on("setSearchText", setSearchText);
 
     return () => {
-      eventBusService.off("setSearchText", setSearchText);
+      unsubscribe();
     };
   }, []);
 

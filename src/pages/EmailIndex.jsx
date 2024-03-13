@@ -15,14 +15,14 @@ export function EmailIndex() {
   const { folder, txt, isRead, sortBy, sortOrder } = filterBy;
 
   useEffect(() => {
-    eventBusService.on("onUpdateEmail", onUpdateEmail);
-    eventBusService.on("onRemoveEmail", onRemoveEmail);
-    eventBusService.on("setFilterBy", setFilterBy);
+    const unsubscribeOnUpdateEmail = eventBusService.on("onUpdateEmail", onUpdateEmail);
+    const unsubscribeOnRemoveEmail = eventBusService.on("onRemoveEmail", onRemoveEmail);
+    const unsubscribeOnSetFilterBy = eventBusService.on("setFilterBy", setFilterBy);
 
     return () => {
-      eventBusService.off("onUpdateEmail", onUpdateEmail);
-      eventBusService.off("onRemoveEmail", onRemoveEmail);
-      eventBusService.off("setFilterBy", setFilterBy);
+      unsubscribeOnUpdateEmail();
+      unsubscribeOnRemoveEmail();
+      unsubscribeOnSetFilterBy();
     };
   }, []);
 

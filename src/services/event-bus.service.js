@@ -10,6 +10,7 @@ function createEventEmitter() {
         : [listener];
       console.log("listenersMap", listenersMap);
 
+      // Use this function to remove an event
       return () => {
         listenersMap[evName] = listenersMap[evName].filter(
           (func) => func !== listener
@@ -21,15 +22,6 @@ function createEventEmitter() {
     emit(evName, data) {
       if (!listenersMap[evName]) return;
       listenersMap[evName].forEach((listener) => listener(data));
-    },
-
-    // Use this function to remove an event
-    off(evName, listenerToRemove) {
-      if (listenersMap[evName]) {
-        listenersMap[evName] = listenersMap[evName].filter(
-          (listener) => listener !== listenerToRemove
-        );
-      }
     },
   };
 }
