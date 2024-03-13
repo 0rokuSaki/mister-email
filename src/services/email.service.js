@@ -10,6 +10,7 @@ export const emailService = {
   createEmail,
   getDefaultEmail,
   getDefaultFilter,
+  getFilterFromParams,
 };
 
 const loggedInUser = {
@@ -26,42 +27,44 @@ async function query(filterBy) {
   if (filterBy) {
     let { txt, isRead, folder } = filterBy;
     emails = emails
-    .filter((email) => {
-      let txtMatches =
-        email.subject.toLowerCase().includes(txt.toLowerCase()) ||
-        email.body.toLowerCase().includes(txt.toLowerCase());
-      let isReadMatches = isRead === null || email.isRead === isRead;
-      let folderMatches = false;
-      switch (folder) {
-        case "inbox":
-          folderMatches =
-            !email.removedAt && email.to === loggedInUser.email && email.sentAt;
-          break;
-        case "starred":
-          folderMatches = !email.removedAt && email.isStarred;
-          break;
-        case "sent":
-          folderMatches =
-            !email.removedAt &&
-            email.from === loggedInUser.email &&
-            email.sentAt;
-          break;
-        case "trash":
-          folderMatches = !!email.removedAt;
-          break;
-      }
+      .filter((email) => {
+        let txtMatches =
+          email.subject.toLowerCase().includes(txt.toLowerCase()) ||
+          email.body.toLowerCase().includes(txt.toLowerCase());
+        let isReadMatches = isRead === null || email.isRead === isRead;
+        let folderMatches = false;
+        switch (folder) {
+          case "inbox":
+            folderMatches =
+              !email.removedAt &&
+              email.to === loggedInUser.email &&
+              email.sentAt;
+            break;
+          case "starred":
+            folderMatches = !email.removedAt && email.isStarred;
+            break;
+          case "sent":
+            folderMatches =
+              !email.removedAt &&
+              email.from === loggedInUser.email &&
+              email.sentAt;
+            break;
+          case "trash":
+            folderMatches = !!email.removedAt;
+            break;
+        }
 
-      return txtMatches && isReadMatches && folderMatches;
-    })
-    .sort((a, b) => {
-      if (filterBy.sortBy === "date") {
-        return b.sentAt - a.sentAt;
-      } else if (filterBy.sortBy === "subject") {
-        return b.subject.toLowerCase().localeCompare(a.subject.toLowerCase());
-      } else {
-        return 0;
-      }
-    });
+        return txtMatches && isReadMatches && folderMatches;
+      })
+      .sort((a, b) => {
+        if (filterBy.sortBy === "date") {
+          return b.sentAt - a.sentAt;
+        } else if (filterBy.sortBy === "subject") {
+          return b.subject.toLowerCase().localeCompare(a.subject.toLowerCase());
+        } else {
+          return 0;
+        }
+      });
     if (filterBy.sortOrder === "asc") {
       emails.reverse();
     }
@@ -122,12 +125,21 @@ function getDefaultEmail() {
 
 function getDefaultFilter() {
   return {
-    folder: "inbox",   // "inbox"/"starred"/"sent"/"draft"/"trash"
+    folder: "inbox", // "inbox"/"starred"/"sent"/"draft"/"trash"
     txt: "",
-    isRead: null,      // null/true/false
-    sortBy: "date",    // "date"/"subject"
+    isRead: null, // null/true/false
+    sortBy: "date", // "date"/"subject"
     sortOrder: "desc", // "asc"/"desc"
   };
+}
+
+function getFilterFromParams(searchParams) {
+  const defaultFilter = getDefaultFilter();
+  const filterBy = {};
+  for (const field in defaultFilter) {
+    filterBy[field] = searchParams.get(field) || defaultFilter[field];
+  }
+  return filterBy;
 }
 
 function _createEmails() {

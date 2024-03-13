@@ -3,21 +3,31 @@ import { emailService } from "../services/email.service";
 import { EmailFolderList } from "../cmps/EmailFolderList";
 import { Outlet } from "react-router";
 import { eventBusService } from "../services/event-bus.service";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { EmailList } from "../cmps/EmailList";
 import { EmailFilterSorter } from "../cmps/EmailFilterSorter";
 
 export function EmailIndex() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [emails, setEmails] = useState(null);
-  const [filterBy, setFilterBy] = useState(emailService.getDefaultFilter());
+  const [filterBy, setFilterBy] = useState(emailService.getFilterFromParams(searchParams));
   const { emailId } = useParams();
 
   const { folder, txt, isRead, sortBy, sortOrder } = filterBy;
 
   useEffect(() => {
-    const unsubscribeOnUpdateEmail = eventBusService.on("onUpdateEmail", onUpdateEmail);
-    const unsubscribeOnRemoveEmail = eventBusService.on("onRemoveEmail", onRemoveEmail);
-    const unsubscribeOnSetFilterBy = eventBusService.on("setFilterBy", setFilterBy);
+    const unsubscribeOnUpdateEmail = eventBusService.on(
+      "onUpdateEmail",
+      onUpdateEmail
+    );
+    const unsubscribeOnRemoveEmail = eventBusService.on(
+      "onRemoveEmail",
+      onRemoveEmail
+    );
+    const unsubscribeOnSetFilterBy = eventBusService.on(
+      "setFilterBy",
+      setFilterBy
+    );
 
     return () => {
       unsubscribeOnUpdateEmail();
@@ -27,6 +37,8 @@ export function EmailIndex() {
   }, []);
 
   useEffect(() => {
+    // TODO: Sanitize filterBy object
+    setSearchParams(filterBy);
     loadEmails();
   }, [filterBy]);
 
