@@ -2,12 +2,13 @@ import { NavLink, useLocation } from "react-router-dom";
 import { eventBusService } from "../services/event-bus.service";
 import { useState, useEffect } from "react";
 
-export function AppHeader() {
+export function AppHeader({filterBy}) {
   const { pathname } = useLocation();
   const [searchText, setSearchText] = useState("");
+  const [filterByToEdit, setFilterByToEdit] = useState(filterBy);
 
   const inEmail = pathname.toLowerCase().includes("email");
-  const dynClass = inEmail ? "active" : "";
+  const dynClass = inEmail ? "active" : ""; // Value to determine wether to display search bat or not
 
   useEffect(() => {
     const unsubscribe = eventBusService.on("setSearchText", setSearchText);
@@ -17,6 +18,10 @@ export function AppHeader() {
     };
   }, []);
 
+  useEffect(() => {
+    eventBusService.emit("onSetFilter", filterByToEdit);
+  }, [filterByToEdit]);
+
   function onChange(ev) {
     const { value } = ev.target;
     setSearchText(value);
@@ -24,9 +29,7 @@ export function AppHeader() {
 
   function onSubmitFilter(ev) {
     ev.preventDefault();
-    eventBusService.emit("setFilterBy", (prevFilter) => {
-      return { ...prevFilter, txt: searchText };
-    });
+    setFilterByToEdit((prevFilter) => { return {...prevFilter, txt: searchText}});
   }
 
   return (

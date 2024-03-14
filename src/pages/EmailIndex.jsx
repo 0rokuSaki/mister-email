@@ -7,20 +7,20 @@ import { useParams, useSearchParams } from "react-router-dom";
 import { EmailList } from "../cmps/EmailList";
 import { EmailFilterSorter } from "../cmps/EmailFilterSorter";
 
-export function EmailIndex() {
+export function EmailIndex({setHeaderFilterBy}) {
   const [searchParams, setSearchParams] = useSearchParams();
   const [emails, setEmails] = useState(null);
-  const [filterBy, setFilterBy] = useState(
-    emailService.getFilterFromParams(searchParams)
-  );
+  const [filterBy, setFilterBy] = useState(emailService.getFilterFromParams(searchParams));
   const { emailId } = useParams();
 
   const { folder, txt, isRead, sortBy, sortOrder } = filterBy;
 
   useEffect(() => {
+    setHeaderFilterBy({txt});
+
     const unsubscribe1 = eventBusService.on("onUpdateEmail", onUpdateEmail);
     const unsubscribe2 = eventBusService.on("onRemoveEmail", onRemoveEmail);
-    const unsubscribe3 = eventBusService.on("setFilterBy", setFilterBy);
+    const unsubscribe3 = eventBusService.on("onSetFilter", onSetFilter);
 
     return () => {
       unsubscribe1();
@@ -31,7 +31,7 @@ export function EmailIndex() {
 
   useEffect(() => {
     // Sanitize filterBy object
-    let f = {}
+    let f = {};
     for (let field in filterBy) {
       if (field !== "folder" && filterBy[field]) {
         f[field] = filterBy[field];

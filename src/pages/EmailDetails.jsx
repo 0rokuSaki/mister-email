@@ -35,8 +35,8 @@ export function EmailDetails() {
     setEmail(updatedEmail); // TODO: What to do if onUpdateEmail fails?
   }
 
-  function onDeleteClick() {
-    onRemoveEmail(email);
+  async function onDeleteClick() {
+    await onRemoveEmail(email);
     navigate(goBackUrl);
   }
 
