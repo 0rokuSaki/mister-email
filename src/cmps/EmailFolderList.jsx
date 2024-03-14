@@ -15,7 +15,7 @@ export function EmailFolderList({ onSetFilter, filterBy }) {
   function onButtonClick(folder) {
     eventBusService.emit("setSearchText", "");
     setFilterByToEdit((prevFilter) => {
-      return { ...prevFilter, folder };
+      return { ...prevFilter, folder, txt: "" };
     });
   }
 
