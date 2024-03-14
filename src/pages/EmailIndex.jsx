@@ -10,35 +10,34 @@ import { EmailFilterSorter } from "../cmps/EmailFilterSorter";
 export function EmailIndex() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [emails, setEmails] = useState(null);
-  const [filterBy, setFilterBy] = useState(emailService.getFilterFromParams(searchParams));
+  const [filterBy, setFilterBy] = useState(
+    emailService.getFilterFromParams(searchParams)
+  );
   const { emailId } = useParams();
 
   const { folder, txt, isRead, sortBy, sortOrder } = filterBy;
 
   useEffect(() => {
-    const unsubscribeOnUpdateEmail = eventBusService.on(
-      "onUpdateEmail",
-      onUpdateEmail
-    );
-    const unsubscribeOnRemoveEmail = eventBusService.on(
-      "onRemoveEmail",
-      onRemoveEmail
-    );
-    const unsubscribeOnSetFilterBy = eventBusService.on(
-      "setFilterBy",
-      setFilterBy
-    );
+    const unsubscribe1 = eventBusService.on("onUpdateEmail", onUpdateEmail);
+    const unsubscribe2 = eventBusService.on("onRemoveEmail", onRemoveEmail);
+    const unsubscribe3 = eventBusService.on("setFilterBy", setFilterBy);
 
     return () => {
-      unsubscribeOnUpdateEmail();
-      unsubscribeOnRemoveEmail();
-      unsubscribeOnSetFilterBy();
+      unsubscribe1();
+      unsubscribe2();
+      unsubscribe3();
     };
   }, []);
 
   useEffect(() => {
-    // TODO: Sanitize filterBy object
-    setSearchParams(filterBy);
+    // Sanitize filterBy object
+    let f = {}
+    for (let field in filterBy) {
+      if (field !== "folder" && filterBy[field]) {
+        f[field] = filterBy[field];
+      }
+    }
+    setSearchParams(f);
     loadEmails();
   }, [filterBy]);
 
