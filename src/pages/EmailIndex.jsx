@@ -29,9 +29,21 @@ export function EmailIndex({ setHeaderFilterBy }) {
     };
   }, []);
 
+  // Reset filter when switching folders
   useEffect(() => {
-    // TODO: Sanitize filterBy object
-    setSearchParams(filterBy);
+    setFilterBy({...emailService.getDefaultFilter(), folder});
+  }, [folder]);
+
+  // When filter changes, set search params and re-load emails
+  useEffect(() => {
+    // Sanitize filter object
+    let params = {}
+    for (const field in filterBy) {
+      if (filterBy[field] != "") {
+        params[field] = filterBy[field]
+      }
+    }
+    setSearchParams(params);
     loadEmails();
   }, [filterBy]);
 
@@ -41,7 +53,6 @@ export function EmailIndex({ setHeaderFilterBy }) {
 
   async function loadEmails() {
     try {
-      console.log(filterBy);
       const emails = await emailService.query(filterBy);
       setEmails(emails);
     } catch (err) {
