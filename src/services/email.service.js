@@ -138,6 +138,15 @@ function getFilterFromParams(searchParams) {
   const filterBy = {};
   for (const field in defaultFilter) {
     filterBy[field] = searchParams.get(field) || defaultFilter[field];
+
+    // Convert parameters from string to boolean or null
+    if (filterBy[field] === "true") {
+      filterBy[field] = true;
+    } else if (filterBy[field] === "false") {
+      filterBy[field] = false;
+    } else if (filterBy[field] === "null") {
+      filterBy[field] = null;
+    }
   }
   return filterBy;
 }

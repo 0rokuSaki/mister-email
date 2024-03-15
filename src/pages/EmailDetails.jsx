@@ -1,4 +1,3 @@
-import { useParams } from "react-router-dom";
 import { useOutletContext, useNavigate } from "react-router";
 import { useEffect, useState } from "react";
 import { emailService } from "../services/email.service";
@@ -7,11 +6,9 @@ import { utilService } from "../services/util.service";
 export function EmailDetails() {
   const [email, setEmail] = useState(null);
   const navigate = useNavigate();
-  const { folder } = useParams();
   const { emailId, onUpdateEmail, onRemoveEmail } = useOutletContext();
 
   const starBtnTxt = email && email.isStarred ? "Unstar" : "Star";
-  const goBackUrl = `/email/${folder}`;
 
   useEffect(() => {
     loadEmail();
@@ -24,7 +21,7 @@ export function EmailDetails() {
       onUpdateEmail(email);
       setEmail(email); // TODO: What to do if onUpdateEmail fails?
     } catch (err) {
-      navigate(goBackUrl);
+      navigate('/email');
       console.log("Error loading email:", err);
     }
   }
@@ -37,7 +34,7 @@ export function EmailDetails() {
 
   async function onDeleteClick() {
     await onRemoveEmail(email);
-    navigate(goBackUrl);
+    navigate('/email');
   }
 
   if (!email) return <div>Loading...</div>;
@@ -45,7 +42,7 @@ export function EmailDetails() {
     <section className="email-details">
       <header>
         <div className="action-buttons">
-          <button className="go-back-btn" onClick={() => navigate(goBackUrl)}>
+          <button className="go-back-btn" onClick={() => navigate('/email')}>
             Go Back
           </button>
           <button className="star-toggle-btn" onClick={onStarToggleClick}>

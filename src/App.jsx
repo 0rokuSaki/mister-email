@@ -22,8 +22,8 @@ export function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
-            <Route path="/email/:folder" element={<EmailIndex setHeaderFilterBy={setHeaderFilterBy}/>}>
-              <Route path=":emailId" element={<EmailDetails />} />
+            <Route path="/email" element={<EmailIndex setHeaderFilterBy={setHeaderFilterBy}/>}>
+              <Route path="/email/:emailId" element={<EmailDetails />} />
             </Route>
           </Routes>
         </main>

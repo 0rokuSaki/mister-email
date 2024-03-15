@@ -59,7 +59,7 @@ export function AppHeader({filterBy}) {
       <nav>
         <NavLink to="/">Home</NavLink>
         <NavLink to="/about">About</NavLink>
-        <NavLink to="/email/inbox" className={dynClass}>
+        <NavLink to="/email" className={dynClass}>
           E-Mail
         </NavLink>
       </nav>

@@ -7,7 +7,7 @@ import { useParams, useSearchParams } from "react-router-dom";
 import { EmailList } from "../cmps/EmailList";
 import { EmailFilterSorter } from "../cmps/EmailFilterSorter";
 
-export function EmailIndex({setHeaderFilterBy}) {
+export function EmailIndex({ setHeaderFilterBy }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const [emails, setEmails] = useState(null);
   const [filterBy, setFilterBy] = useState(emailService.getFilterFromParams(searchParams));
@@ -16,7 +16,7 @@ export function EmailIndex({setHeaderFilterBy}) {
   const { folder, txt, isRead, sortBy, sortOrder } = filterBy;
 
   useEffect(() => {
-    setHeaderFilterBy({txt});
+    setHeaderFilterBy({ txt });
 
     const unsubscribe1 = eventBusService.on("onUpdateEmail", onUpdateEmail);
     const unsubscribe2 = eventBusService.on("onRemoveEmail", onRemoveEmail);
@@ -30,14 +30,8 @@ export function EmailIndex({setHeaderFilterBy}) {
   }, []);
 
   useEffect(() => {
-    // Sanitize filterBy object
-    let f = {};
-    for (let field in filterBy) {
-      if (field !== "folder" && filterBy[field]) {
-        f[field] = filterBy[field];
-      }
-    }
-    setSearchParams(f);
+    // TODO: Sanitize filterBy object
+    setSearchParams(filterBy);
     loadEmails();
   }, [filterBy]);
 
@@ -47,6 +41,7 @@ export function EmailIndex({setHeaderFilterBy}) {
 
   async function loadEmails() {
     try {
+      console.log(filterBy);
       const emails = await emailService.query(filterBy);
       setEmails(emails);
     } catch (err) {
