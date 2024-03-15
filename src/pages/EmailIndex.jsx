@@ -3,7 +3,7 @@ import { emailService } from "../services/email.service";
 import { EmailFolderList } from "../cmps/EmailFolderList";
 import { Outlet } from "react-router";
 import { eventBusService } from "../services/event-bus.service";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useParams, useSearchParams, useLocation } from "react-router-dom";
 import { EmailList } from "../cmps/EmailList";
 import { EmailFilterSorter } from "../cmps/EmailFilterSorter";
 
@@ -14,8 +14,10 @@ export function EmailIndex({ setHeaderFilterBy }) {
     emailService.getFilterFromParams(searchParams)
   );
   const { emailId } = useParams();
+  const { pathname } = useLocation();
 
   const { folder, txt, isRead, sortBy, sortOrder } = filterBy;
+  const inEmailCompose = pathname.includes("compose");
 
   useEffect(() => {
     setHeaderFilterBy({ txt });
@@ -114,6 +116,9 @@ export function EmailIndex({ setHeaderFilterBy }) {
       {emailId && (
         <Outlet context={{ emailId, onUpdateEmail, onRemoveEmail }} />
       )}
+      {inEmailCompose &&
+        <Outlet />
+      }
     </section>
   );
 }

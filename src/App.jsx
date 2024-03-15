@@ -8,21 +8,26 @@ import { About } from "./pages/About";
 import { EmailIndex } from "./pages/EmailIndex";
 import { EmailDetails } from "./pages/EmailDetails";
 import { useState } from "react";
+import { EmailCompose } from "./pages/EmailCompose";
 
 export function App() {
   // State for communicating filter object between EmailIndex and AppHeader
-  const [headerFilterBy, setHeaderFilterBy] = useState(null)
+  const [headerFilterBy, setHeaderFilterBy] = useState(null);
 
   return (
     <Router>
       <section className="main-app">
-        <AppHeader filterBy={headerFilterBy}/>
+        <AppHeader filterBy={headerFilterBy} />
 
         <main>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
-            <Route path="/email" element={<EmailIndex setHeaderFilterBy={setHeaderFilterBy}/>}>
+            <Route
+              path="/email"
+              element={<EmailIndex setHeaderFilterBy={setHeaderFilterBy} />}
+            >
+              <Route path="/email/compose" element={<EmailCompose />} />
               <Route path="/email/:emailId" element={<EmailDetails />} />
             </Route>
           </Routes>
