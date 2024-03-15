@@ -10,7 +10,9 @@ import { EmailFilterSorter } from "../cmps/EmailFilterSorter";
 export function EmailIndex({ setHeaderFilterBy }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const [emails, setEmails] = useState(null);
-  const [filterBy, setFilterBy] = useState(emailService.getFilterFromParams(searchParams));
+  const [filterBy, setFilterBy] = useState(
+    emailService.getFilterFromParams(searchParams)
+  );
   const { emailId } = useParams();
 
   const { folder, txt, isRead, sortBy, sortOrder } = filterBy;
@@ -31,16 +33,17 @@ export function EmailIndex({ setHeaderFilterBy }) {
 
   // Reset filter when switching folders
   useEffect(() => {
-    setFilterBy({...emailService.getDefaultFilter(), folder});
-  }, [folder]);
+    setFilterBy({ ...emailService.getDefaultFilter(), folder: filterBy.folder });
+    eventBusService.emit("onEmailFilterSorterReset");
+  }, [filterBy.folder]);
 
   // When filter changes, set search params and re-load emails
   useEffect(() => {
     // Sanitize filter object
-    let params = {}
+    let params = {};
     for (const field in filterBy) {
       if (filterBy[field] != "") {
-        params[field] = filterBy[field]
+        params[field] = filterBy[field];
       }
     }
     setSearchParams(params);
