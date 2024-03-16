@@ -28,6 +28,7 @@ export function App() {
               element={<EmailIndex setHeaderFilterBy={setHeaderFilterBy} />}
             >
               <Route path="/email/compose" element={<EmailCompose />} />
+              <Route path="/email/compose/:emailId" element={<EmailCompose />} />
               <Route path="/email/:emailId" element={<EmailDetails />} />
             </Route>
           </Routes>

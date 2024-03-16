@@ -11,6 +11,7 @@ export const emailService = {
   getDefaultEmail,
   getDefaultFilter,
   getFilterFromParams,
+  isEmailMatchingFilter,
 };
 
 const loggedInUser = {
@@ -118,7 +119,7 @@ function getDefaultEmail() {
     isStarred: false,
     sentAt: null,
     removedAt: null,
-    from: "",
+    from: loggedInUser.email,
     to: "",
   };
 }
@@ -149,6 +150,33 @@ function getFilterFromParams(searchParams) {
     }
   }
   return filterBy;
+}
+
+function isEmailMatchingFilter(email, filterBy) {
+  let { txt, isRead, folder } = filterBy;
+  let txtMatches =
+    email.subject.toLowerCase().includes(txt.toLowerCase()) ||
+    email.body.toLowerCase().includes(txt.toLowerCase());
+  let isReadMatches = isRead === null || email.isRead === isRead;
+  let folderMatches = false;
+  switch (folder) {
+    case "inbox":
+      folderMatches =
+        !email.removedAt && email.to === loggedInUser.email && email.sentAt;
+      break;
+    case "starred":
+      folderMatches = !email.removedAt && email.isStarred;
+      break;
+    case "sent":
+      folderMatches =
+        !email.removedAt && email.from === loggedInUser.email && email.sentAt;
+      break;
+    case "trash":
+      folderMatches = !!email.removedAt;
+      break;
+  }
+
+  return txtMatches && isReadMatches && folderMatches;
 }
 
 function _createEmails() {

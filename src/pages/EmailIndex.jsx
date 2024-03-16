@@ -35,7 +35,10 @@ export function EmailIndex({ setHeaderFilterBy }) {
 
   // Reset filter when switching folders
   useEffect(() => {
-    setFilterBy({ ...emailService.getDefaultFilter(), folder: filterBy.folder });
+    setFilterBy({
+      ...emailService.getDefaultFilter(),
+      folder: filterBy.folder,
+    });
     eventBusService.emit("onEmailFilterSorterReset");
   }, [filterBy.folder]);
 
@@ -102,6 +105,17 @@ export function EmailIndex({ setHeaderFilterBy }) {
     }
   }
 
+  async function onAddEmail(email) {
+    try {
+      const savedEmail = await emailService.save(email);
+      if (emailService.isEmailMatchingFilter(email, filterBy)) {
+        setEmails((prevEmails) => [...prevEmails, savedEmail]);
+      }
+    } catch (err) {
+      console.log("Had issues adding email", err);
+    }
+  }
+
   if (!emails) return <div>Loading...</div>;
   return (
     <section className="email-index">
@@ -116,9 +130,7 @@ export function EmailIndex({ setHeaderFilterBy }) {
       {emailId && (
         <Outlet context={{ emailId, onUpdateEmail, onRemoveEmail }} />
       )}
-      {inEmailCompose &&
-        <Outlet />
-      }
+      {inEmailCompose && <Outlet context={{ onUpdateEmail, onAddEmail }} />}
     </section>
   );
 }
