@@ -1,24 +1,39 @@
 import { useNavigate, useOutletContext, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { emailService } from "../services/email.service";
-import { func } from "prop-types";
 
 export function EmailCompose() {
   const navigate = useNavigate();
   const context = useOutletContext();
   const { emailId } = useParams();
   const [email, setEmail] = useState(emailService.getDefaultEmail());
+  const timeoutId = useRef(null);
 
   useEffect(() => {
     if (emailId) {
       loadEmail();
     }
+
+    return () => {
+      if (timeoutId.current) {
+        clearTimeout(timeoutId.current);
+      }
+    }
   }, []);
 
   useEffect(() => {
+    if (timeoutId.current) {
+      clearTimeout(timeoutId.current);
+    }
+    timeoutId.current = setTimeout(() => {
+      saveEmail();
+    }, 5000);
+  }, [email])
+
+  useEffect(() => {
     if (email.to) {
-      sendEmail();
+      saveEmail();
     }
   }, [email.sentAt]);
 
@@ -31,14 +46,19 @@ export function EmailCompose() {
     }
   }
 
-  async function sendEmail() {
+  async function saveEmail() {
     try {
-      if (email.id) await context.onUpdateEmail(email);
-      else await context.onAddEmail(email);
+      if (email.id) {
+        await context.onUpdateEmail(email);
+      } else {
+        const savedEmail = await context.onAddEmail({...email, savedAt: Date.now()});
+        if (savedEmail) {
+          setEmail(prevEmail => ({...prevEmail, ...savedEmail}));
+        }
+      }
     } catch (err) {
       console.log("Had issues saving email", err);
     }
-    navigate(-1);
   }
 
   function onChange(ev) {
@@ -47,7 +67,7 @@ export function EmailCompose() {
   }
 
   async function onCloseClick() {
-    console.log("Close clicked, saving draft...");
+    await saveEmail();
     navigate(-1);
   }
 
@@ -60,6 +80,7 @@ export function EmailCompose() {
       }
     }
     setEmail((prevEmail) => ({ ...prevEmail, sentAt: Date.now() }));
+    navigate(-1);
   }
 
   return (

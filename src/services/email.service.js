@@ -26,37 +26,8 @@ _createEmails();
 async function query(filterBy) {
   let emails = await storageService.query(STORAGE_KEY);
   if (filterBy) {
-    let { txt, isRead, folder } = filterBy;
     emails = emails
-      .filter((email) => {
-        let txtMatches =
-          email.subject.toLowerCase().includes(txt.toLowerCase()) ||
-          email.body.toLowerCase().includes(txt.toLowerCase());
-        let isReadMatches = isRead === null || email.isRead === isRead;
-        let folderMatches = false;
-        switch (folder) {
-          case "inbox":
-            folderMatches =
-              !email.removedAt &&
-              email.to === loggedInUser.email &&
-              email.sentAt;
-            break;
-          case "starred":
-            folderMatches = !email.removedAt && email.isStarred;
-            break;
-          case "sent":
-            folderMatches =
-              !email.removedAt &&
-              email.from === loggedInUser.email &&
-              email.sentAt;
-            break;
-          case "trash":
-            folderMatches = !!email.removedAt;
-            break;
-        }
-
-        return txtMatches && isReadMatches && folderMatches;
-      })
+      .filter((email) => isEmailMatchingFilter(email, filterBy))
       .sort((a, b) => {
         if (filterBy.sortBy === "date") {
           return b.sentAt - a.sentAt;
@@ -117,8 +88,9 @@ function getDefaultEmail() {
     body: "",
     isRead: false,
     isStarred: false,
-    sentAt: null,
-    removedAt: null,
+    sentAt: null, // Timestamp (e.g. Data.now())
+    savedAt: null, // Timestamp (e.g. Data.now())
+    removedAt: null, // Timestamp (e.g. Data.now())
     from: loggedInUser.email,
     to: "",
   };
@@ -153,30 +125,36 @@ function getFilterFromParams(searchParams) {
 }
 
 function isEmailMatchingFilter(email, filterBy) {
-  let { txt, isRead, folder } = filterBy;
-  let txtMatches =
-    email.subject.toLowerCase().includes(txt.toLowerCase()) ||
-    email.body.toLowerCase().includes(txt.toLowerCase());
-  let isReadMatches = isRead === null || email.isRead === isRead;
-  let folderMatches = false;
-  switch (folder) {
-    case "inbox":
-      folderMatches =
-        !email.removedAt && email.to === loggedInUser.email && email.sentAt;
-      break;
-    case "starred":
-      folderMatches = !email.removedAt && email.isStarred;
-      break;
-    case "sent":
-      folderMatches =
-        !email.removedAt && email.from === loggedInUser.email && email.sentAt;
-      break;
-    case "trash":
-      folderMatches = !!email.removedAt;
-      break;
+  const { txt, isRead, folder } = filterBy;
+
+  // Check if text matches
+  if (
+    !email.subject.toLowerCase().includes(txt.toLowerCase()) &&
+    !email.body.toLowerCase().includes(txt.toLowerCase())
+  ) {
+    return false;
   }
 
-  return txtMatches && isReadMatches && folderMatches;
+  // Check if read status matches
+  if (isRead !== null && email.isRead !== isRead) {
+    return false;
+  }
+
+  // Check if folder matches
+  switch (folder) {
+    case "inbox":
+      return !(email.removedAt || email.to !== loggedInUser.email || !email.sentAt);
+    case "starred":
+      return !(email.removedAt || !email.isStarred);
+    case "sent":
+      return !(email.removedAt || email.from !== loggedInUser.email || !email.sentAt);
+    case "draft":
+      return !(email.removedAt || email.sentAt);
+    case "trash":
+      return email.removedAt !== null;
+    default:
+      return true;
+  }
 }
 
 function _createEmails() {

@@ -1,7 +1,7 @@
 import { utilService } from "../services/util.service";
 import { eventBusService } from "../services/event-bus.service";
 
-export function EmailPreview({ email }) {
+export function EmailPreview({ email, folder }) {
   function onButtonClick(ev) {
     ev.stopPropagation();
     ev.preventDefault();
@@ -24,7 +24,7 @@ export function EmailPreview({ email }) {
     }
   }
 
-  const dynClass = email.isRead ? "" : "unread";
+  const dynClass = (email.isRead || folder === "draft") ? "" : "unread";
   const starBtnTxt = email.isStarred ? "Unstar" : "Star";
   const markBtnTxt = email.isRead ? "Mark As Unread" : "Mark As Read";
   return (
@@ -38,15 +38,16 @@ export function EmailPreview({ email }) {
       </span>
       <span className="subject-wrapper">{email.subject}</span>
       <span className="date-wrapper">
-        {utilService.formatTimestamp(email.sentAt)}
+        {folder !== "draft" && utilService.formatTimestamp(email.sentAt)}
+        {folder === "draft" && utilService.formatTimestamp(email.savedAt)}
       </span>
       <span className="action-buttons-wrapper">
         <button className="delete-btn" onClick={onButtonClick}>
           Delete
         </button>
-        <button className="read-status-toggle-btn" onClick={onButtonClick}>
+        {folder !== "draft" && <button className="read-status-toggle-btn" onClick={onButtonClick}>
           {markBtnTxt}
-        </button>
+        </button>}
       </span>
     </article>
   );

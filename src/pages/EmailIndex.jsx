@@ -111,6 +111,7 @@ export function EmailIndex({ setHeaderFilterBy }) {
       if (emailService.isEmailMatchingFilter(email, filterBy)) {
         setEmails((prevEmails) => [...prevEmails, savedEmail]);
       }
+      return savedEmail;
     } catch (err) {
       console.log("Had issues adding email", err);
     }
@@ -120,14 +121,14 @@ export function EmailIndex({ setHeaderFilterBy }) {
   return (
     <section className="email-index">
       <EmailFolderList onSetFilter={onSetFilter} filterBy={{ folder }} />
-      {!emailId && (
+      {(!emailId || inEmailCompose) && (
         <EmailFilterSorter
           onSetFilter={onSetFilter}
           filterBy={{ isRead, sortBy, sortOrder }}
         />
       )}
-      {!emailId && <EmailList emails={emails} />}
-      {emailId && (
+      {(!emailId || inEmailCompose) && <EmailList emails={emails} folder={folder} />}
+      {(emailId && !inEmailCompose) && (
         <Outlet context={{ emailId, onUpdateEmail, onRemoveEmail }} />
       )}
       {inEmailCompose && <Outlet context={{ onUpdateEmail, onAddEmail }} />}
