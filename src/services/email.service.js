@@ -12,6 +12,7 @@ export const emailService = {
   getDefaultFilter,
   getFilterFromParams,
   isEmailMatchingFilter,
+  getUnreadCount,
 };
 
 const loggedInUser = {
@@ -155,6 +156,17 @@ function isEmailMatchingFilter(email, filterBy) {
     default:
       return true;
   }
+}
+
+async function getUnreadCount() {
+  const filterBy = getDefaultFilter();
+  const emails = await query(filterBy);
+  return emails.reduce((acc, email) => {
+    if (!email.isRead) {
+      return acc + 1;
+    }
+    return acc;
+  }, 0)
 }
 
 function _createEmails() {
