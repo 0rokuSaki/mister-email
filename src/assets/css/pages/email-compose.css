@@ -3,13 +3,25 @@
   height: 2.4em;
 }
 
-.email-compose.visible {
+.email-compose.normal {
   grid-template-rows: auto 1fr;
   height: 32em;
 }
 
+.email-compose.full {
+  position: fixed; 
+  inset: 0;
+  border-radius: 0.5em;
+  margin: 2em;
+  grid-template-rows: 2.5em auto;
+
+  header {
+    border-radius: 0.5em 0.5em 0 0;
+  }
+}
+
 .email-compose {
-  position: fixed;
+  position: absolute;
   bottom: 0px;
   right: 2em;
   width: 32em;
@@ -20,6 +32,7 @@
   display: grid;
   grid-template-columns: 1fr;
   z-index: 2;
+  overflow: hidden;
 
   header {
     background-color: #ccc;

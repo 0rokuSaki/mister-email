@@ -9,7 +9,7 @@ export function EmailCompose() {
   const { emailId } = useParams();
   const [email, setEmail] = useState(emailService.getDefaultEmail());
   const timeoutId = useRef(null);
-  const [viewState, setViewState] = useState("visible");
+  const [viewState, setViewState] = useState("normal"); // normal, minimized, full
 
   useEffect(() => {
     if (emailId) {
@@ -67,8 +67,13 @@ export function EmailCompose() {
     setEmail((prevEmail) => ({ ...prevEmail, [field]: value }));
   }
 
-  function onChangeViewClick() {
-    setViewState(viewState === "visible" ? "minimized" : "visible");
+  function onChangeViewClick(ev) {
+    const {value} = ev.target;
+    if (value === "minimize-toggle") {
+      setViewState(viewState !== "minimized" ? "minimized" : "normal");
+    } else { // value = full-toggle
+      setViewState(viewState !== "full" ? "full" : "normal");
+    }
   }
 
   async function onCloseClick() {
@@ -93,7 +98,8 @@ export function EmailCompose() {
       <header>
         <h4>New Message</h4>
         <div className="buttons-wrapper">
-          <button onClick={onChangeViewClick}>{viewState === "visible" ? "Minimize" : "Show"}</button>
+          <button onClick={onChangeViewClick} value={"minimize-toggle"}>{viewState !== "minimized" ? "Minimized" : "Normal"}</button>
+          <button onClick={onChangeViewClick} value={"full-toggle"}>{viewState !== "full" ? "Full" : "Normal"}</button>
           <button onClick={onCloseClick}>Close</button>
         </div>
       </header>
