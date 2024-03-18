@@ -9,6 +9,7 @@ export function EmailCompose() {
   const { emailId } = useParams();
   const [email, setEmail] = useState(emailService.getDefaultEmail());
   const timeoutId = useRef(null);
+  const [viewState, setViewState] = useState("visible");
 
   useEffect(() => {
     if (emailId) {
@@ -66,6 +67,10 @@ export function EmailCompose() {
     setEmail((prevEmail) => ({ ...prevEmail, [field]: value }));
   }
 
+  function onChangeViewClick() {
+    setViewState(viewState === "visible" ? "minimized" : "visible");
+  }
+
   async function onCloseClick() {
     await saveEmail();
     navigate(-1);
@@ -84,10 +89,13 @@ export function EmailCompose() {
   }
 
   return (
-    <section className="email-compose">
+    <section className={`email-compose ${viewState}`}>
       <header>
         <h4>New Message</h4>
-        <button onClick={onCloseClick}>Close</button>
+        <div className="buttons-wrapper">
+          <button onClick={onChangeViewClick}>{viewState === "visible" ? "Minimize" : "Show"}</button>
+          <button onClick={onCloseClick}>Close</button>
+        </div>
       </header>
       <main>
         <form onSubmit={onSubmit}>
